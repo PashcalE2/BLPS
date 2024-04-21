@@ -1,21 +1,31 @@
 package main.blps_lab1.repository;
 
-import main.blps_lab1.data.Client;
+import main.blps_lab1.data.ClientInterface;
+import main.blps_lab1.data.CourseInterface;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface ClientRepository {
-    @Query(value = "select * from Client where email=:email and password=:password", nativeQuery = true)
-    Optional<Client> findClientByEmailAndPassword(String email, String password);
+    @Modifying
+    @Query(value = "insert into Client values(default, email, password, null, null, null)", nativeQuery = true)
+    void registerClient(String email, String password);
 
-    @Query(value = "update ClientProfile set card_serial=:card_serial, card_validity=:card_validity, card_cvv=:card_cvv where email=:email", nativeQuery = true)
+    @Query(value = "select id, email, password, card_serial as cardSerial, card_validity as cardValidity, card_cvv as cardCvv from Client where email=:email and password=:password", nativeQuery = true)
+    Optional<ClientInterface> findClientByEmailAndPassword(String email, String password);
+
+    @Modifying
+    @Query(value = "update Client set card_serial=:card_serial, card_validity=:card_validity, card_cvv=:card_cvv where email=:email", nativeQuery = true)
     void updateClientCard(String email, String card_serial, String card_validity, String card_cvv);
 
     @Modifying
-    @Query(value = "insert into ClientsCourses client_id, course_id values (:client_id, :course_id)", nativeQuery = true)
+    @Query(value = "insert into ClientsCourses (client_id, course_id) values (:client_id, :course_id)", nativeQuery = true)
     void courseSignUp(Long client_id, Long course_id);
+
+    @Query(value = "select id, name, price from Course where name like :filter", nativeQuery = true)
+    List<CourseInterface> getCoursesByFilter(String filter);
 }

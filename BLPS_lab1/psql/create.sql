@@ -4,14 +4,14 @@ create table Client(
     password text not null,
     card_serial text,
     card_validity text,
-    card_cvv int
+    card_cvv text
 );
 
 create table BankCard(
     id bigserial primary key,
     serial_number text unique not null,
     validity_date text,
-    cvv int
+    cvv text
 );
 
 create table Course(

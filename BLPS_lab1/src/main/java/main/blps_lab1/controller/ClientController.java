@@ -1,15 +1,13 @@
 package main.blps_lab1.controller;
 
-import main.blps_lab1.data.Client;
+import main.blps_lab1.data.ClientInterface;
 import main.blps_lab1.service.ClientService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.annotation.ApplicationScope;
 
-import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -26,7 +24,7 @@ public class ClientController {
     public @ResponseBody ResponseEntity<?> courseSignUp(
             @RequestParam String email,
             @RequestParam String password,
-            @RequestParam Long course_id
+            @RequestParam(defaultValue = "0") Long course_id
     ) {
         /*
             1. Найти профиль
@@ -38,17 +36,16 @@ public class ClientController {
             7. Записать на курс, вернуть OK
         */
 
-        Optional<Client> db_client = clientService.findClientByEmailAndPassword(email, password);
+        Optional<ClientInterface> db_client = clientService.findClientByEmailAndPassword(email, password);
 
         if (db_client.isEmpty()) {
             return new ResponseEntity<>("Нет такого пользователя", HttpStatus.CONFLICT);
         }
 
-        Client client = db_client.get();
+        ClientInterface client = db_client.get();
 
-        // clientService.courseSignUp(client.getId(), course_id);
-
-        return new ResponseEntity<>("Тест", HttpStatus.OK);
+        clientService.courseSignUp(client.getId(), course_id);
+        return new ResponseEntity<>(String.format("Пользователь (%d) записался на курс (%d)", client.getId(), course_id), HttpStatus.OK);
     }
 
     @PostMapping(value = "/client/register")
@@ -56,8 +53,8 @@ public class ClientController {
             @RequestParam String email,
             @RequestParam String password
     ) {
-
-        return new ResponseEntity<>("Тест", HttpStatus.OK);
+        clientService.registerClient(email, password);
+        return new ResponseEntity<>(String.format("Зарегистрирован пользователь:\n%s\n%s", email, password), HttpStatus.OK);
     }
 
     @PostMapping(value = "/client/set_debit_card")
@@ -67,15 +64,14 @@ public class ClientController {
             @RequestParam String card_validity,
             @RequestParam String card_cvv
     ) {
-
-        return new ResponseEntity<>("Тест", HttpStatus.OK);
+        clientService.updateClientCard(email, card_serial, card_validity, card_cvv);
+        return new ResponseEntity<>(String.format("Данные карты клиента (%s) обновлены:\n%s\n%s\n%s", email, card_serial, card_validity, card_cvv), HttpStatus.OK);
     }
 
     @GetMapping(value = "/client/get_courses")
-    public @ResponseBody ResponseEntity<?> getCourses(
-            @RequestParam List<String> filters
+    public @ResponseBody ResponseEntity<?> getCoursesByFilter(
+            @RequestParam String filter
     ) {
-
-        return new ResponseEntity<>("Тест", HttpStatus.OK);
+        return new ResponseEntity<>(clientService.getCoursesByFilter(filter), HttpStatus.OK);
     }
 }
