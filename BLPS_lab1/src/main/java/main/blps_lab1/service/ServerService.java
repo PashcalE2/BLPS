@@ -1,15 +1,13 @@
 package main.blps_lab1.service;
 
 import main.blps_lab1.repository.ServerRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ServerService implements ServerRepository {
-    private final ServerRepository serverRepository;
-
-    public ServerService(ServerRepository serverRepository) {
-        this.serverRepository = serverRepository;
-    }
+public class ServerService implements ServerServiceInterface {
+    @Autowired
+    private ServerRepository serverRepository;
 
     @Override
     public void removeMoney(String card_serial, String validity_date, String cvv, Integer money) {

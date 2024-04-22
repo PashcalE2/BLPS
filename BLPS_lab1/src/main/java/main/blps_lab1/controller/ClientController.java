@@ -2,7 +2,8 @@ package main.blps_lab1.controller;
 
 import main.blps_lab1.data.ClientInterface;
 import main.blps_lab1.data.CourseInterface;
-import main.blps_lab1.service.ClientService;
+import main.blps_lab1.service.ClientServiceInterface;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -10,20 +11,19 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.annotation.ApplicationScope;
 
 import java.net.URI;
+import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 @Controller
 @CrossOrigin
 @ApplicationScope
 public class ClientController {
-    private final ClientService clientService;
-
-    public ClientController(ClientService clientService) {
-        this.clientService = clientService;
-    }
+    @Autowired
+    private ClientServiceInterface clientService;
 
     @PostMapping(value = "/client/course_sign_up")
     public @ResponseBody ResponseEntity<?> courseSignUp(
@@ -65,7 +65,12 @@ public class ClientController {
             return new ResponseEntity<>("Нужны реквизиты для оплаты курса", HttpStatus.CONFLICT);
         }
 
-        String bankRequest = String.format("http://localhost:22600/BLPS-lab1/server/pay?card_serial=%s&card_validity=%s&card_cvv=%s&money=%s", client.getCardSerial(), client.getCardValidity(), client.getCardCvv(), course.getPrice());
+        String bankRequest = String.format("http://localhost:22600/BLPS-lab1-rolling/server/pay?card_serial=%s&card_validity=%s&card_cvv=%s&money=%s",
+                URLEncoder.encode(client.getCardSerial(), StandardCharsets.UTF_8),
+                URLEncoder.encode(client.getCardValidity(), StandardCharsets.UTF_8),
+                URLEncoder.encode(client.getCardCvv(), StandardCharsets.UTF_8),
+                URLEncoder.encode(course.getPrice().toString(), StandardCharsets.UTF_8)
+        );
         try {
             HttpClient httpClient = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
@@ -81,6 +86,7 @@ public class ClientController {
             }
         } catch (Exception e) {
             System.out.println("Не удалось сделать запрос на списание средств");
+            System.out.println(e.getMessage());
             return new ResponseEntity<>("Не удалось связаться с банком", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
@@ -102,11 +108,12 @@ public class ClientController {
     @PostMapping(value = "/client/set_debit_card")
     public @ResponseBody ResponseEntity<?> setDebitCard(
             @RequestParam String email,
+            @RequestParam String password,
             @RequestParam String card_serial,
             @RequestParam String card_validity,
             @RequestParam String card_cvv
     ) {
-        clientService.updateClientCard(email, card_serial, card_validity, card_cvv);
+        clientService.updateClientCard(email, password, card_serial, card_validity, card_cvv);
         System.out.printf("Данные карты клиента (%s) обновлены:\n%s\n%s\n%s\n", email, card_serial, card_validity, card_cvv);
         return new ResponseEntity<>("Данные обновлены", HttpStatus.OK);
     }

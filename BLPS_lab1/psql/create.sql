@@ -1,6 +1,6 @@
 create table Client(
     id bigserial primary key,
-    email text unique not null,
+    email text unique not null check (email ~ '\w+@\w+\.\w+'),
     password text not null,
     card_serial text,
     card_validity text,
@@ -9,7 +9,7 @@ create table Client(
 
 create table BankCard(
     id bigserial primary key,
-    serial_number text unique not null check (serial_number ~ '(?:\d\d\d\d){4}'),
+    serial_number text unique not null check (serial_number ~ '\d\d\d\d \d\d\d\d \d\d\d\d \d\d\d\d'),
     validity_date text not null check (validity_date ~ '\d\d/\d\d\d\d'),
     cvv text not null check (cvv ~ '\d\d\d'),
     money int not null check (money >= 0)

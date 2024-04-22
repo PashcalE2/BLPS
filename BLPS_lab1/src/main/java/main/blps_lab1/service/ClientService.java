@@ -3,18 +3,16 @@ package main.blps_lab1.service;
 import main.blps_lab1.data.ClientInterface;
 import main.blps_lab1.data.CourseInterface;
 import main.blps_lab1.repository.ClientRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ClientService implements ClientRepository {
-    private final ClientRepository clientRepository;
-
-    public ClientService(ClientRepository clientRepository) {
-        this.clientRepository = clientRepository;
-    }
+public class ClientService implements ClientServiceInterface {
+    @Autowired
+    private ClientRepository clientRepository;
 
     @Override
     public void registerClient(String email, String password) {
@@ -27,8 +25,8 @@ public class ClientService implements ClientRepository {
     }
 
     @Override
-    public void updateClientCard(String email, String card_serial, String card_validity, String card_cvv) {
-        clientRepository.updateClientCard(email, card_serial, card_validity, card_cvv);
+    public void updateClientCard(String email, String password, String card_serial, String card_validity, String card_cvv) {
+        clientRepository.updateClientCard(email, password, card_serial, card_validity, card_cvv);
     }
 
 

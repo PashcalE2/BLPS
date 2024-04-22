@@ -1,6 +1,6 @@
 package main.blps_lab1.controller;
 
-import main.blps_lab1.service.ServerService;
+import main.blps_lab1.service.ServerServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,20 +8,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.annotation.ApplicationScope;
 
 @Controller
 @CrossOrigin
 @ApplicationScope
 public class ServerController {
-    private final ServerService serverService;
-
-    public ServerController(ServerService serverService) {
-        this.serverService = serverService;
-    }
+    @Autowired
+    private ServerServiceInterface serverService;
 
     @PostMapping(value = "/server/pay")
-    public ResponseEntity<?> pay(
+    public @ResponseBody ResponseEntity<?> pay(
             @RequestParam String card_serial,
             @RequestParam String card_validity,
             @RequestParam String card_cvv,
