@@ -11,7 +11,8 @@ create table BankCard(
     id bigserial primary key,
     serial_number text unique not null,
     validity_date text,
-    cvv text
+    cvv text,
+    money int
 );
 
 create table Course(

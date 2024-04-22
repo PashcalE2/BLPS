@@ -17,7 +17,7 @@ public class ServerController {
             @RequestParam String card_serial,
             @RequestParam String card_validity,
             @RequestParam String card_cvv,
-            @RequestParam Integer sum
+            @RequestParam(defaultValue = "0") Integer money
     ) {
         return new ResponseEntity<>("Тест", HttpStatus.OK);
     }

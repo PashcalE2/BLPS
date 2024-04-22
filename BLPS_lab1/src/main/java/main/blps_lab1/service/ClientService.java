@@ -41,4 +41,14 @@ public class ClientService implements ClientRepository {
     public List<CourseInterface> getCoursesByFilter(String filter) {
         return clientRepository.getCoursesByFilter(filter);
     }
+
+    @Override
+    public Optional<CourseInterface> getCourseById(Long course_id) {
+        return clientRepository.getCourseById(course_id);
+    }
+
+    @Override
+    public Boolean isClientSignedUpForCourse(Long client_id, Long course_id) {
+        return clientRepository.isClientSignedUpForCourse(client_id, course_id);
+    }
 }

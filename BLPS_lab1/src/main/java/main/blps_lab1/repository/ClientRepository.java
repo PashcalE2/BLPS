@@ -26,6 +26,12 @@ public interface ClientRepository {
     @Query(value = "insert into ClientsCourses (client_id, course_id) values (:client_id, :course_id)", nativeQuery = true)
     void courseSignUp(Long client_id, Long course_id);
 
-    @Query(value = "select id, name, price from Course where name like :filter", nativeQuery = true)
+    @Query(value = "select id, name, price from Course where name ~ :filter", nativeQuery = true)
     List<CourseInterface> getCoursesByFilter(String filter);
+
+    @Query(value = "select id, name, price from Course where id = :course_id", nativeQuery = true)
+    Optional<CourseInterface> getCourseById(Long course_id);
+
+    @Query(value = "select (select count(*) from ClientsCourses where client_id = :client_id and course_id = :course_id) = 1", nativeQuery = true)
+    Boolean isClientSignedUpForCourse(Long client_id, Long course_id);
 }
