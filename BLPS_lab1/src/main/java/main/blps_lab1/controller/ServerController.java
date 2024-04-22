@@ -1,5 +1,7 @@
 package main.blps_lab1.controller;
 
+import main.blps_lab1.service.ServerService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -12,6 +14,12 @@ import org.springframework.web.context.annotation.ApplicationScope;
 @CrossOrigin
 @ApplicationScope
 public class ServerController {
+    private final ServerService serverService;
+
+    public ServerController(ServerService serverService) {
+        this.serverService = serverService;
+    }
+
     @PostMapping(value = "/server/pay")
     public ResponseEntity<?> pay(
             @RequestParam String card_serial,
@@ -19,6 +27,8 @@ public class ServerController {
             @RequestParam String card_cvv,
             @RequestParam(defaultValue = "0") Integer money
     ) {
-        return new ResponseEntity<>("Тест", HttpStatus.OK);
+        serverService.removeMoney(card_serial, card_validity, card_cvv, money);
+        System.out.printf("Операция списания денег выполнена:\n%s\n%d\n", card_serial, money);
+        return new ResponseEntity<>("Деньги списаны", HttpStatus.OK);
     }
 }

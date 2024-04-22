@@ -9,16 +9,16 @@ create table Client(
 
 create table BankCard(
     id bigserial primary key,
-    serial_number text unique not null,
-    validity_date text,
-    cvv text,
-    money int
+    serial_number text unique not null check (serial_number ~ '(?:\d\d\d\d){4}'),
+    validity_date text not null check (validity_date ~ '\d\d/\d\d\d\d'),
+    cvv text not null check (cvv ~ '\d\d\d'),
+    money int not null check (money >= 0)
 );
 
 create table Course(
     id bigserial primary key,
     name text unique not null,
-    price int
+    price int not null check (price > 0)
 );
 
 create table ClientsCourses(
