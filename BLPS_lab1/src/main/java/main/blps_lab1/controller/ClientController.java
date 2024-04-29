@@ -1,7 +1,9 @@
 package main.blps_lab1.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import main.blps_lab1.data.ClientInterface;
 import main.blps_lab1.data.CourseInterface;
+import main.blps_lab1.exception.*;
 import main.blps_lab1.service.ClientServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +23,7 @@ import java.util.Optional;
 @Controller
 @CrossOrigin
 @ApplicationScope
+@Slf4j
 public class ClientController {
     @Autowired
     private ClientServiceInterface clientService;
@@ -30,39 +33,27 @@ public class ClientController {
             @RequestParam String email,
             @RequestParam String password,
             @RequestParam(defaultValue = "0") Long course_id
-    ) {
-        /*
-            1. Найти профиль
-            2. Если нет - вернуть "требуется регистрация" CONFLICT, иначе #3
-            3. Если нет реквизитов - вернуть "требуется реквизит" CONFLICT, иначе #4
-            4. Сделать post-запрос в банк для проведения операции
-            5. Получить ответ от банка
-            6. Если оплата не произошла - вернуть "недостаточно средств" CONFLICT, иначе
-            7. Записать на курс, вернуть OK
-        */
+    ) throws CourseNotFoundException, ClientAlreadySignedUpException, ClientNotFoundException, ClientCardDataIsMissingException, CantRequestBankException {
+        // вынести во второй лабе
 
         Optional<CourseInterface> db_course = clientService.getCourseById(course_id);
         if (db_course.isEmpty()) {
-            System.out.printf("Нет такого курса (%d)\n", course_id);
-            return new ResponseEntity<>("Нет такого курса", HttpStatus.CONFLICT);
+            throw new CourseNotFoundException(course_id);
         }
         CourseInterface course = db_course.get();
 
         Optional<ClientInterface> db_client = clientService.findClientByEmailAndPassword(email, password);
         if (db_client.isEmpty()) {
-            System.out.printf("Нет такого пользователя (%s, %s)\n", email, password);
-            return new ResponseEntity<>("Неправильные данные пользователя", HttpStatus.CONFLICT);
+            throw new ClientNotFoundException(email, password);
         }
         ClientInterface client = db_client.get();
 
         if (clientService.isClientSignedUpForCourse(client.getId(), course.getId())) {
-            System.out.printf("Пользователь (%d) уже записан на курс (%d)\n", client.getId(), course.getId());
-            return new ResponseEntity<>("Пользователь уже записан на курс", HttpStatus.CONFLICT);
+            throw new ClientAlreadySignedUpException(client.getId(), course.getId());
         }
 
         if (client.getCardSerial() == null || client.getCardValidity() == null || client.getCardCvv() == null) {
-            System.out.printf("У пользователя (%d) нет реквизитов для оплаты\n", client.getId());
-            return new ResponseEntity<>("Нужны реквизиты для оплаты курса", HttpStatus.CONFLICT);
+            throw new ClientCardDataIsMissingException(client.getId());
         }
 
         String bankRequest = String.format("http://localhost:22600/BLPS-lab1-rolling/server/pay?card_serial=%s&card_validity=%s&card_cvv=%s&money=%s",
@@ -81,17 +72,14 @@ public class ClientController {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (HttpStatus.resolve(response.statusCode()) != HttpStatus.OK) {
-                System.out.printf("Не удалось списать средства (%s, %d)\n", client.getCardSerial(), course.getPrice());
-                return new ResponseEntity<>("Не удалось списать средства", HttpStatus.CONFLICT);
+                throw new NotEnoughMoneyOnCardException(client.getCardSerial(), course.getPrice());
             }
         } catch (Exception e) {
-            System.out.println("Не удалось сделать запрос на списание средств");
-            System.out.println(e.getMessage());
-            return new ResponseEntity<>("Не удалось связаться с банком", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new CantRequestBankException(e.getMessage());
         }
 
         clientService.courseSignUp(client.getId(), course.getId());
-        System.out.printf("Пользователь (%d) записался на курс (%d)\n", client.getId(), course_id);
+        log.info(String.format("Пользователь (%d) записался на курс (%d)\n", client.getId(), course_id));
         return new ResponseEntity<>("Пользователь записан на курс", HttpStatus.OK);
     }
 
@@ -99,9 +87,17 @@ public class ClientController {
     public @ResponseBody ResponseEntity<?> clientRegister(
             @RequestParam String email,
             @RequestParam String password
-    ) {
-        clientService.registerClient(email, password);
-        System.out.printf("Зарегистрирован пользователь:\n%s\n%s\n", email, password);
+    ) throws ClientRegisterException {
+
+        try {
+            clientService.registerClient(email, password);
+        }
+        catch (RuntimeException e) {
+            log.error(e.getMessage());
+            throw new ClientRegisterException(email);
+        }
+
+        log.info(String.format("Зарегистрирован пользователь:\n%s\n%s\n", email, password));
         return new ResponseEntity<>("Пользователь зарегистрирован", HttpStatus.OK);
     }
 
@@ -112,16 +108,23 @@ public class ClientController {
             @RequestParam String card_serial,
             @RequestParam String card_validity,
             @RequestParam String card_cvv
-    ) {
-        clientService.updateClientCard(email, password, card_serial, card_validity, card_cvv);
-        System.out.printf("Данные карты клиента (%s) обновлены:\n%s\n%s\n%s\n", email, card_serial, card_validity, card_cvv);
+    ) throws ClientCardDataUpdateException {
+
+        try {
+            clientService.updateClientCard(email, password, card_serial, card_validity, card_cvv);
+        }
+        catch (RuntimeException e) {
+            throw new ClientCardDataUpdateException(email, password, card_serial, card_validity, card_cvv);
+        }
+
+        log.info(String.format("Данные карты клиента (%s) обновлены:\n%s\n%s\n%s\n", email, card_serial, card_validity, card_cvv));
         return new ResponseEntity<>("Данные обновлены", HttpStatus.OK);
     }
 
     @GetMapping(value = "/client/get_courses")
-    public @ResponseBody ResponseEntity<?> getCoursesByFilter(
-            @RequestParam String filter
+    public @ResponseBody ResponseEntity<?> getCoursesByName(
+            @RequestParam String name
     ) {
-        return new ResponseEntity<>(clientService.getCoursesByFilter(filter), HttpStatus.OK);
+        return new ResponseEntity<>(clientService.getCoursesByName(name), HttpStatus.OK);
     }
 }

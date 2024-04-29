@@ -36,8 +36,8 @@ public class ClientService implements ClientServiceInterface {
     }
 
     @Override
-    public List<CourseInterface> getCoursesByFilter(String filter) {
-        return clientRepository.getCoursesByFilter(filter);
+    public List<CourseInterface> getCoursesByName(String filter) {
+        return clientRepository.getCoursesByName(filter);
     }
 
     @Override

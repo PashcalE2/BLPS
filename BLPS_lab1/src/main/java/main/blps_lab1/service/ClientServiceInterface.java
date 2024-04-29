@@ -16,7 +16,7 @@ public interface ClientServiceInterface {
 
     void courseSignUp(Long client_id, Long course_id);
 
-    List<CourseInterface> getCoursesByFilter(String filter);
+    List<CourseInterface> getCoursesByName(String filter);
 
     Optional<CourseInterface> getCourseById(Long course_id);
 

@@ -33,7 +33,7 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
     void courseSignUp(Long client_id, Long course_id);
 
     @Query(value = "select id, name, price from Course where name ~ :filter", nativeQuery = true)
-    List<CourseInterface> getCoursesByFilter(String filter);
+    List<CourseInterface> getCoursesByName(String filter);
 
     @Query(value = "select id, name, price from Course where id = :course_id", nativeQuery = true)
     Optional<CourseInterface> getCourseById(Long course_id);
