@@ -33,7 +33,7 @@ public class ClientController {
             @RequestParam String email,
             @RequestParam String password,
             @RequestParam(defaultValue = "0") Long course_id
-    ) throws CourseNotFoundException, ClientAlreadySignedUpException, ClientNotFoundException, ClientCardDataIsMissingException, CantRequestBankException {
+    ) throws CourseNotFoundException, ClientAlreadySignedUpException, ClientNotFoundException, ClientCardDataIsMissingException, CantRequestBankException, NotEnoughMoneyOnCardException {
         // вынести во второй лабе
 
         Optional<CourseInterface> db_course = clientService.getCourseById(course_id);
@@ -56,12 +56,14 @@ public class ClientController {
             throw new ClientCardDataIsMissingException(client.getId());
         }
 
-        String bankRequest = String.format("http://localhost:22600/BLPS-lab1-rolling/server/pay?card_serial=%s&card_validity=%s&card_cvv=%s&money=%s",
+        String bankRequest = String.format("http://localhost:22600/server/pay?card_serial=%s&card_validity=%s&card_cvv=%s&money=%s",
                 URLEncoder.encode(client.getCardSerial(), StandardCharsets.UTF_8),
                 URLEncoder.encode(client.getCardValidity(), StandardCharsets.UTF_8),
                 URLEncoder.encode(client.getCardCvv(), StandardCharsets.UTF_8),
                 URLEncoder.encode(course.getPrice().toString(), StandardCharsets.UTF_8)
         );
+
+        HttpResponse<String> response;
         try {
             HttpClient httpClient = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
@@ -69,13 +71,13 @@ public class ClientController {
                     .POST(HttpRequest.BodyPublishers.noBody())
                     .build();
 
-            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-
-            if (HttpStatus.resolve(response.statusCode()) != HttpStatus.OK) {
-                throw new NotEnoughMoneyOnCardException(client.getCardSerial(), course.getPrice());
-            }
+            response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
         } catch (Exception e) {
             throw new CantRequestBankException(e.getMessage());
+        }
+
+        if (HttpStatus.resolve(response.statusCode()) != HttpStatus.OK) {
+            throw new NotEnoughMoneyOnCardException(client.getCardSerial(), course.getPrice());
         }
 
         clientService.courseSignUp(client.getId(), course.getId());
