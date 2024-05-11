@@ -29,7 +29,6 @@ public class ClientService implements ClientServiceInterface {
         clientRepository.updateClientCard(email, password, card_serial, card_validity, card_cvv);
     }
 
-
     @Override
     public void courseSignUp(Long client_id, Long course_id) {
         clientRepository.courseSignUp(client_id, course_id);
