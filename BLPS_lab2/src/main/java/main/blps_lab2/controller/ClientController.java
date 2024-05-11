@@ -23,12 +23,13 @@ import java.util.Optional;
 @Controller
 @CrossOrigin
 @ApplicationScope
+@RequestMapping(value = "/client")
 @Slf4j
 public class ClientController {
     @Autowired
     private ClientServiceInterface clientService;
 
-    @PostMapping(value = "/client/course_sign_up")
+    @PostMapping(value = "/course_sign_up")
     public @ResponseBody ResponseEntity<?> courseSignUp(
             @RequestParam String email,
             @RequestParam String password,
@@ -85,7 +86,7 @@ public class ClientController {
         return new ResponseEntity<>("Пользователь записан на курс", HttpStatus.OK);
     }
 
-    @PostMapping(value = "/client/register")
+    @PostMapping(value = "/register")
     public @ResponseBody ResponseEntity<?> clientRegister(
             @RequestParam String email,
             @RequestParam String password
@@ -103,7 +104,7 @@ public class ClientController {
         return new ResponseEntity<>("Пользователь зарегистрирован", HttpStatus.OK);
     }
 
-    @PostMapping(value = "/client/set_debit_card")
+    @PostMapping(value = "/set_debit_card")
     public @ResponseBody ResponseEntity<?> setDebitCard(
             @RequestParam String email,
             @RequestParam String password,
@@ -123,7 +124,7 @@ public class ClientController {
         return new ResponseEntity<>("Данные обновлены", HttpStatus.OK);
     }
 
-    @GetMapping(value = "/client/get_courses")
+    @GetMapping(value = "/get_courses")
     public @ResponseBody ResponseEntity<?> getCoursesByName(
             @RequestParam String name
     ) {
