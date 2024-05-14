@@ -2,7 +2,7 @@ package main.blps_lab2.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import main.blps_lab2.exception.NotEnoughMoneyOnCardException;
-import main.blps_lab2.service.ServerServiceInterface;
+import main.blps_lab2.service.BankServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,11 +13,11 @@ import org.springframework.web.context.annotation.ApplicationScope;
 @Controller
 @CrossOrigin
 @ApplicationScope
-@RequestMapping(value = "/server")
+@RequestMapping(value = "/bank")
 @Slf4j
-public class ServerController {
+public class BankController {
     @Autowired
-    private ServerServiceInterface serverService;
+    private BankServiceInterface serverService;
 
     @PostMapping(value = "/pay")
     public @ResponseBody ResponseEntity<?> pay(

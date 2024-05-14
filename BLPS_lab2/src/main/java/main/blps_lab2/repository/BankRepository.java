@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-public interface ServerRepository extends JpaRepository<BankCard, Long> {
+public interface BankRepository extends JpaRepository<BankCard, Long> {
     @Modifying
     @Transactional
     @Query(value = "call remove_money(:card_serial, :validity_date, :cvv, :money)", nativeQuery = true)

@@ -40,4 +40,6 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
 
     @Query(value = "select (select count(*) from ClientsCourses where client_id = :client_id and course_id = :course_id) = 1", nativeQuery = true)
     Boolean isClientSignedUpForCourse(Long client_id, Long course_id);
+
+    Optional<Client> findClientByEmail(String email);
 }
