@@ -21,24 +21,24 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query(value = "select * from \"User\" where email=:email and password=:password", nativeQuery = true)
     Optional<User> findUserByEmailAndPassword(String email, String password);
 
-    @Query(value = "select id, user_id as userId, serial_number as serialNumber, validity_date as validityDate, cvv, money from BankCard where user_id = :userId", nativeQuery = true)
+    @Query(value = "select id, user_id as userId, serial_number as serialNumber, validity_date as validityDate, cvv, money from \"BankCard\" where user_id = :userId", nativeQuery = true)
     Optional<BankCard> findBankCardByUserId(Long userId);
 
     @Modifying
-    @Query(value = "update BankCard set user_id = :userId where id = :cardId", nativeQuery = true)
+    @Query(value = "update \"BankCard\" set user_id = :userId where id = :cardId", nativeQuery = true)
     void updateClientCard(Long userId, Long cardId);
 
     @Modifying
-    @Query(value = "insert into UsersCourses (user_id, course_id) values (:userId, :courseId)", nativeQuery = true)
+    @Query(value = "insert into \"UsersCourses\" (user_id, course_id) values (:userId, :courseId)", nativeQuery = true)
     void courseSignUp(Long userId, Long courseId);
 
-    @Query(value = "select id, name, price from Course where name ~ :name", nativeQuery = true)
+    @Query(value = "select id, name, price from \"Course\" where name ~ :name", nativeQuery = true)
     List<CourseInterface> getCoursesByName(String name);
 
-    @Query(value = "select id, name, price from Course where id = :courseId", nativeQuery = true)
+    @Query(value = "select id, name, price from \"Course\" where id = :courseId", nativeQuery = true)
     Optional<CourseInterface> getCourseById(Long courseId);
 
-    @Query(value = "select (select count(*) from UsersCourses where user_id = :userId and course_id = :courseId) = 1", nativeQuery = true)
+    @Query(value = "select (select count(*) from \"UsersCourses\" where user_id = :userId and course_id = :courseId) = 1", nativeQuery = true)
     Boolean isUserSignedUpForCourse(Long userId, Long courseId);
 
     Optional<User> findUserByEmail(String email);

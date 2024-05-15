@@ -1,5 +1,6 @@
 drop type if exists
-    RoleEnum;
+    RoleEnum
+    cascade;
 
 drop table if exists
     Client,

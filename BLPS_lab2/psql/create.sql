@@ -1,4 +1,4 @@
-create type RoleEnum as enum (
+create type "RoleEnum" as enum (
     'ADMIN',
     'CLIENT'
 );
@@ -7,10 +7,10 @@ create table if not exists "User"(
     id bigserial primary key,
     email text unique not null check (email ~ '\w+@\w+\.\w+'),
     password text not null,
-    role RoleEnum not null
+    role "RoleEnum" not null
 );
 
-create table if not exists UserBan(
+create table if not exists "UserBan"(
     id bigserial primary key,
     user_id bigint references "User"(id) not null,
     banned_on timestamp not null,
@@ -18,7 +18,7 @@ create table if not exists UserBan(
     comment text
 );
 
-create table if not exists BankCard(
+create table if not exists "BankCard"(
     id bigserial primary key,
     user_id bigint references "User"(id),
     serial_number text unique not null check (serial_number ~ '\d\d\d\d \d\d\d\d \d\d\d\d \d\d\d\d'),
@@ -27,14 +27,14 @@ create table if not exists BankCard(
     money int not null check (money >= 0)
 );
 
-create table if not exists Course(
+create table if not exists "Course"(
     id bigserial primary key,
     name text unique not null,
     price int not null check (price > 0)
 );
 
-create table if not exists UsersCourses(
+create table if not exists "UsersCourses"(
     user_id bigint references "User"(id),
-    course_id bigint references Course(id),
+    course_id bigint references "Course"(id),
     primary key (user_id, course_id)
 );

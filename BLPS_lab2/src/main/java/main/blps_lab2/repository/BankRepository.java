@@ -11,6 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 public interface BankRepository extends JpaRepository<BankCard, Long> {
     @Modifying
     @Transactional
-    @Query(value = "call remove_money(:cardId, :money)", nativeQuery = true)
+    @Query(value = "call \"remove_money\"(:cardId, :money)", nativeQuery = true)
     void removeMoney(Long cardId, Integer money);
 }

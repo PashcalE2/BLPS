@@ -108,8 +108,8 @@ public class ClientController {
         return new ResponseEntity<>("Пользователь зарегистрирован", HttpStatus.OK);
     }
 
-    @PostMapping(value = "/set_debit_card")
-    public @ResponseBody ResponseEntity<?> setDebitCard(
+    @PostMapping(value = "/attach_debit_card")
+    public @ResponseBody ResponseEntity<?> attachDebitCard(
             @RequestParam(defaultValue = "0") Long userId,
             @RequestParam String cardSerial,
             @RequestParam String cardValidity,
@@ -117,7 +117,7 @@ public class ClientController {
     ) throws ClientCardDataUpdateException {
 
         try {
-            userService.updateClientCard(userId, 0l);
+            userService.attachClientCard(userId, 0l);
         }
         catch (RuntimeException e) {
             throw new ClientCardDataUpdateException(userId, cardSerial, cardValidity, cardCvv);

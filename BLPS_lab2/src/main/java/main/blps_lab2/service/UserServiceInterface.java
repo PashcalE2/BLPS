@@ -16,7 +16,7 @@ public interface UserServiceInterface {
 
     Optional<BankCard> findBankCardByUserId(Long userId);
 
-    void updateClientCard(Long userId, Long cardId);
+    void attachClientCard(Long userId, Long cardId);
 
     void courseSignUp(Long clientId, Long courseId);
 

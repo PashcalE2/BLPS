@@ -1,6 +1,6 @@
-drop procedure if exists remove_money(text, text, text, int);
+drop procedure if exists "remove_money"(text, text, text, int);
 
-create or replace procedure remove_money(arg_card_id bigint, arg_money int)
+create or replace procedure "remove_money"(arg_card_id bigint, arg_money int)
 as $$
 declare
     card record;
