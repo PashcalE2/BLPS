@@ -58,7 +58,7 @@ public class DefaultAdvice {
 
     @ExceptionHandler(NotEnoughMoneyOnCardException.class)
     public ResponseEntity<?> handleNotEnoughMoneyOnCard(NotEnoughMoneyOnCardException e) {
-        log.error(String.format("На карте '%s' должно быть хотя бы %d средств", e.getCardSerial(), e.getPrice()));
+        log.error(String.format("На карте '%s' должно быть хотя бы %d средств", e.getCardId(), e.getPrice()));
         return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
     }
 }

@@ -4,12 +4,13 @@ import lombok.Getter;
 
 @Getter
 public class NotEnoughMoneyOnCardException extends Exception {
-    private final Long cardSerial;
+    private final Long cardId;
     private final Integer price;
 
-    public NotEnoughMoneyOnCardException(Long cardSerial, Integer price) {
+    public NotEnoughMoneyOnCardException(Long cardId, Integer price) {
         super("Недостаточно средств на карте");
-        this.cardSerial = cardSerial;
+        this.cardId = cardId;
         this.price = price;
     }
+
 }

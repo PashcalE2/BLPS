@@ -1,6 +1,7 @@
 package main.blps_lab2.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import main.blps_lab2.data.BankCard;
 import main.blps_lab2.data.RoleEnum;
 import main.blps_lab2.data.User;
 import main.blps_lab2.data.CourseInterface;
@@ -28,7 +29,7 @@ import java.util.Optional;
 @Slf4j
 public class ClientController {
     @Autowired
-    private UserServiceInterface clientService;
+    private UserServiceInterface userService;
 
     @PostMapping(value = "/course_sign_up")
     public @ResponseBody ResponseEntity<?> courseSignUp(
@@ -38,30 +39,32 @@ public class ClientController {
     ) throws CourseNotFoundException, ClientAlreadySignedUpException, ClientNotFoundException, ClientCardDataIsMissingException, CantRequestBankException, NotEnoughMoneyOnCardException {
         // вынести во второй лабе
 
-        Optional<CourseInterface> db_course = clientService.getCourseById(course_id);
+        Optional<CourseInterface> db_course = userService.getCourseById(course_id);
         if (db_course.isEmpty()) {
             throw new CourseNotFoundException(course_id);
         }
         CourseInterface course = db_course.get();
 
-        Optional<User> db_client = clientService.findUserByEmailAndPassword(email, password);
+        Optional<User> db_client = userService.findUserByEmailAndPassword(email, password);
         if (db_client.isEmpty()) {
             throw new ClientNotFoundException(email, password);
         }
         User client = db_client.get();
 
-        if (clientService.isUserSignedUpForCourse(client.getId(), course.getId())) {
+        if (userService.isUserSignedUpForCourse(client.getId(), course.getId())) {
             throw new ClientAlreadySignedUpException(client.getId(), course.getId());
         }
 
-        if (client.getCardSerial() == null || client.getCardValidity() == null || client.getCardCvv() == null) {
+        Optional<BankCard> db_bankCard = userService.findBankCardByUserId(client.getId());
+        if (db_bankCard.isEmpty()) {
             throw new ClientCardDataIsMissingException(client.getId());
         }
+        BankCard bankCard = db_bankCard.get();
 
         String bankRequest = String.format("http://localhost:22600/server/pay?card_serial=%s&card_validity=%s&card_cvv=%s&money=%s",
-                URLEncoder.encode(client.getCardSerial(), StandardCharsets.UTF_8),
-                URLEncoder.encode(client.getCardValidity(), StandardCharsets.UTF_8),
-                URLEncoder.encode(client.getCardCvv(), StandardCharsets.UTF_8),
+                URLEncoder.encode(bankCard.getSerialNumber(), StandardCharsets.UTF_8),
+                URLEncoder.encode(bankCard.getValidityDate(), StandardCharsets.UTF_8),
+                URLEncoder.encode(bankCard.getCvv(), StandardCharsets.UTF_8),
                 URLEncoder.encode(course.getPrice().toString(), StandardCharsets.UTF_8)
         );
 
@@ -79,10 +82,10 @@ public class ClientController {
         }
 
         if (HttpStatus.resolve(response.statusCode()) != HttpStatus.OK) {
-            throw new NotEnoughMoneyOnCardException(client.getCardSerial(), course.getPrice());
+            throw new NotEnoughMoneyOnCardException(bankCard.getId(), course.getPrice());
         }
 
-        clientService.courseSignUp(client.getId(), course.getId());
+        userService.courseSignUp(client.getId(), course.getId());
         log.info(String.format("Пользователь (%d) записался на курс (%d)\n", client.getId(), course_id));
         return new ResponseEntity<>("Пользователь записан на курс", HttpStatus.OK);
     }
@@ -94,7 +97,7 @@ public class ClientController {
     ) throws ClientRegisterException {
 
         try {
-            clientService.registerUser(email, password, RoleEnum.CLIENT);
+            userService.registerUser(email, password, RoleEnum.CLIENT);
         }
         catch (RuntimeException e) {
             log.error(e.getMessage());
@@ -108,19 +111,19 @@ public class ClientController {
     @PostMapping(value = "/set_debit_card")
     public @ResponseBody ResponseEntity<?> setDebitCard(
             @RequestParam(defaultValue = "0") Long userId,
-            @RequestParam String card_serial,
-            @RequestParam String card_validity,
-            @RequestParam String card_cvv
+            @RequestParam String cardSerial,
+            @RequestParam String cardValidity,
+            @RequestParam String cardCvv
     ) throws ClientCardDataUpdateException {
 
         try {
-            clientService.updateClientCard(userId, 0l);
+            userService.updateClientCard(userId, 0l);
         }
         catch (RuntimeException e) {
-            throw new ClientCardDataUpdateException(userId, card_serial, card_validity, card_cvv);
+            throw new ClientCardDataUpdateException(userId, cardSerial, cardValidity, cardCvv);
         }
 
-        log.info(String.format("Данные карты клиента (%s) обновлены:\n%s\n%s\n%s\n", email, card_serial, card_validity, card_cvv));
+        log.info(String.format("Данные карты клиента (%d) обновлены:\n%s\n%s\n%s\n", userId, cardSerial, cardValidity, cardCvv));
         return new ResponseEntity<>("Данные обновлены", HttpStatus.OK);
     }
 
@@ -128,6 +131,6 @@ public class ClientController {
     public @ResponseBody ResponseEntity<?> getCoursesByName(
             @RequestParam String name
     ) {
-        return new ResponseEntity<>(clientService.getCoursesByName(name), HttpStatus.OK);
+        return new ResponseEntity<>(userService.getCoursesByName(name), HttpStatus.OK);
     }
 }

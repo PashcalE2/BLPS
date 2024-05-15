@@ -1,5 +1,6 @@
 package main.blps_lab2.service;
 
+import main.blps_lab2.data.BankCard;
 import main.blps_lab2.data.RoleEnum;
 import main.blps_lab2.data.User;
 import main.blps_lab2.data.CourseInterface;
@@ -12,6 +13,8 @@ public interface UserServiceInterface {
     void registerUser(String email, String password, RoleEnum role);
 
     Optional<User> findUserByEmailAndPassword(String email, String password);
+
+    Optional<BankCard> findBankCardByUserId(Long userId);
 
     void updateClientCard(Long userId, Long cardId);
 
