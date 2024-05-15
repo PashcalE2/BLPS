@@ -10,7 +10,7 @@ public class BankService implements BankServiceInterface {
     private BankRepository bankRepository;
 
     @Override
-    public void removeMoney(String card_serial, String validity_date, String cvv, Integer money) {
-        bankRepository.removeMoney(card_serial, validity_date, cvv, money);
+    public void removeMoney(Long cardId, Integer money) {
+        bankRepository.removeMoney(cardId,  money);
     }
 }

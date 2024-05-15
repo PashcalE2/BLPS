@@ -21,18 +21,16 @@ public class BankController {
 
     @PostMapping(value = "/pay")
     public @ResponseBody ResponseEntity<?> pay(
-            @RequestParam String card_serial,
-            @RequestParam String card_validity,
-            @RequestParam String card_cvv,
+            @RequestParam(defaultValue = "0") Long cardId,
             @RequestParam(defaultValue = "0") Integer money
     ) throws NotEnoughMoneyOnCardException {
         try {
-            serverService.removeMoney(card_serial, card_validity, card_cvv, money);
+            serverService.removeMoney(cardId, money);
         }
         catch (RuntimeException e) {
-            throw new NotEnoughMoneyOnCardException(card_serial, money);
+            throw new NotEnoughMoneyOnCardException(cardId, money);
         }
-        log.info(String.format("Операция списания денег выполнена:\n%s\n%d\n", card_serial, money));
+        log.info(String.format("Операция списания денег выполнена:\n%d\n%d\n", cardId, money));
         return new ResponseEntity<>("Деньги списаны", HttpStatus.OK);
     }
 }

@@ -1,10 +1,11 @@
 package main.blps_lab2.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import main.blps_lab2.data.ClientInterface;
+import main.blps_lab2.data.RoleEnum;
+import main.blps_lab2.data.User;
 import main.blps_lab2.data.CourseInterface;
 import main.blps_lab2.exception.*;
-import main.blps_lab2.service.ClientServiceInterface;
+import main.blps_lab2.service.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,7 @@ import java.util.Optional;
 @Slf4j
 public class ClientController {
     @Autowired
-    private ClientServiceInterface clientService;
+    private UserServiceInterface clientService;
 
     @PostMapping(value = "/course_sign_up")
     public @ResponseBody ResponseEntity<?> courseSignUp(
@@ -43,13 +44,13 @@ public class ClientController {
         }
         CourseInterface course = db_course.get();
 
-        Optional<ClientInterface> db_client = clientService.findClientByEmailAndPassword(email, password);
+        Optional<User> db_client = clientService.findUserByEmailAndPassword(email, password);
         if (db_client.isEmpty()) {
             throw new ClientNotFoundException(email, password);
         }
-        ClientInterface client = db_client.get();
+        User client = db_client.get();
 
-        if (clientService.isClientSignedUpForCourse(client.getId(), course.getId())) {
+        if (clientService.isUserSignedUpForCourse(client.getId(), course.getId())) {
             throw new ClientAlreadySignedUpException(client.getId(), course.getId());
         }
 
@@ -93,7 +94,7 @@ public class ClientController {
     ) throws ClientRegisterException {
 
         try {
-            clientService.registerClient(email, password);
+            clientService.registerUser(email, password, RoleEnum.CLIENT);
         }
         catch (RuntimeException e) {
             log.error(e.getMessage());
@@ -106,18 +107,17 @@ public class ClientController {
 
     @PostMapping(value = "/set_debit_card")
     public @ResponseBody ResponseEntity<?> setDebitCard(
-            @RequestParam String email,
-            @RequestParam String password,
+            @RequestParam(defaultValue = "0") Long userId,
             @RequestParam String card_serial,
             @RequestParam String card_validity,
             @RequestParam String card_cvv
     ) throws ClientCardDataUpdateException {
 
         try {
-            clientService.updateClientCard(email, password, card_serial, card_validity, card_cvv);
+            clientService.updateClientCard(userId, 0l);
         }
         catch (RuntimeException e) {
-            throw new ClientCardDataUpdateException(email, password, card_serial, card_validity, card_cvv);
+            throw new ClientCardDataUpdateException(email, card_serial, card_validity, card_cvv);
         }
 
         log.info(String.format("Данные карты клиента (%s) обновлены:\n%s\n%s\n%s\n", email, card_serial, card_validity, card_cvv));

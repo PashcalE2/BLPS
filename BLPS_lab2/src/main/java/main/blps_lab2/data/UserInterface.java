@@ -1,6 +1,6 @@
 package main.blps_lab2.data;
 
-public interface ClientInterface {
+public interface UserInterface {
     Long getId();
 
     String getEmail();

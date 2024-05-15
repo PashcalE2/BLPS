@@ -5,11 +5,13 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.sql.Timestamp;
+
 @Entity
 @EqualsAndHashCode
 @Getter
 @Setter
-public class BankCard {
+public class UserBan {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @jakarta.persistence.Column(name = "id", nullable = false)
@@ -20,18 +22,14 @@ public class BankCard {
     private Long userId;
 
     @Basic
-    @Column(name = "serial_number", nullable = false, length = -1)
-    private String serialNumber;
+    @Column(name = "banned_on", nullable = false)
+    private Timestamp bannedOn;
 
     @Basic
-    @Column(name = "validity_date", nullable = false, length = -1)
-    private String validityDate;
+    @Column(name = "unban_on", nullable = true)
+    private Timestamp unbanOn;
 
     @Basic
-    @Column(name = "cvv", nullable = false, length = -1)
-    private String cvv;
-
-    @Basic
-    @Column(name = "money", nullable = false)
-    private Integer money;
+    @Column(name = "comment", nullable = true, length = -1)
+    private String comment;
 }
