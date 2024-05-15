@@ -1,6 +1,6 @@
 package main.blps_lab2.service;
 
-import main.blps_lab2.data.Client;
+import main.blps_lab2.data.User;
 import main.blps_lab2.repository.UserRepository;
 import main.blps_lab2.security.AuthUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +16,9 @@ public class ClientDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Client client = userRepository.findUserByEmail(username)
+        User user = userRepository.findUserByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Нет клиентов с такой почтой: " + username));
 
-        return AuthUserDetails.build(client);
+        return AuthUserDetails.build(user);
     }
 }

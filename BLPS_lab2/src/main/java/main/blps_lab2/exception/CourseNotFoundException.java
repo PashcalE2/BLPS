@@ -1,14 +1,13 @@
 package main.blps_lab2.exception;
 
+import lombok.Getter;
+
+@Getter
 public class CourseNotFoundException extends Exception {
-    private final Long course_id;
+    private final Long courseId;
 
-    public CourseNotFoundException(Long course_id) {
+    public CourseNotFoundException(Long courseId) {
         super("Нет такого курса");
-        this.course_id = course_id;
-    }
-
-    public Long getCourseId() {
-        return course_id;
+        this.courseId = courseId;
     }
 }

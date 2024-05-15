@@ -30,9 +30,8 @@ public class DefaultAdvice {
 
     @ExceptionHandler(ClientCardDataUpdateException.class)
     public ResponseEntity<?> handleClientCardDataUpdate(ClientCardDataUpdateException e) {
-        log.error(String.format("Неправильный формат данных карточки: \n%s \n%s \n%s \n%s \n%s",
-                e.getEmail(),
-                e.getPassword(),
+        log.error(String.format("Неправильный формат данных карточки: \n%d \n%s \n%s \n%s",
+                e.getUserId(),
                 e.getCardSerial(),
                 e.getCardValidity(),
                 e.getCardCvv()));

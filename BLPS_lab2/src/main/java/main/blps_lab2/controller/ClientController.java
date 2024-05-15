@@ -117,7 +117,7 @@ public class ClientController {
             clientService.updateClientCard(userId, 0l);
         }
         catch (RuntimeException e) {
-            throw new ClientCardDataUpdateException(email, card_serial, card_validity, card_cvv);
+            throw new ClientCardDataUpdateException(userId, card_serial, card_validity, card_cvv);
         }
 
         log.info(String.format("Данные карты клиента (%s) обновлены:\n%s\n%s\n%s\n", email, card_serial, card_validity, card_cvv));

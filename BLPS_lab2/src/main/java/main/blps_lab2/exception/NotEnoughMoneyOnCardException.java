@@ -1,5 +1,8 @@
 package main.blps_lab2.exception;
 
+import lombok.Getter;
+
+@Getter
 public class NotEnoughMoneyOnCardException extends Exception {
     private final Long cardSerial;
     private final Integer price;
@@ -8,13 +11,5 @@ public class NotEnoughMoneyOnCardException extends Exception {
         super("Недостаточно средств на карте");
         this.cardSerial = cardSerial;
         this.price = price;
-    }
-
-    public Long getCardSerial() {
-        return cardSerial;
-    }
-
-    public Integer getPrice() {
-        return price;
     }
 }

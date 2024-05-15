@@ -1,15 +1,13 @@
 package main.blps_lab2.exception;
 
+import lombok.Getter;
+
+@Getter
 public class ClientCardDataIsMissingException extends Exception {
-    private final Long client_id;
+    private final Long clientId;
 
-    public ClientCardDataIsMissingException(Long client_id) {
+    public ClientCardDataIsMissingException(Long clientId) {
         super("Нет данных для оплаты курса");
-        this.client_id = client_id;
+        this.clientId = clientId;
     }
-
-    public Long getClientId() {
-        return client_id;
-    }
-
 }

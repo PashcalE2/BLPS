@@ -1,5 +1,8 @@
 package main.blps_lab2.exception;
 
+import lombok.Getter;
+
+@Getter
 public class ClientNotFoundException extends Exception {
     private final String login;
     private final String password;
@@ -8,13 +11,5 @@ public class ClientNotFoundException extends Exception {
         super("Неправильные данные пользователя");
         this.login = login;
         this.password = password;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public String getPassword() {
-        return password;
     }
 }

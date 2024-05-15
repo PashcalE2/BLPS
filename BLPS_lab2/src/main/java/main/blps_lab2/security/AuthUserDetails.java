@@ -1,6 +1,6 @@
 package main.blps_lab2.security;
 
-import main.blps_lab2.data.Client;
+import main.blps_lab2.data.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,20 +20,12 @@ public class AuthUserDetails implements UserDetails {
         this.authorities = authorities;
     }
 
-    public static AuthUserDetails build(Client client) {
+    public static AuthUserDetails build(User user) {
         List<GrantedAuthority> authorities = new ArrayList<>() {{
             add(new SimpleGrantedAuthority(Role.CLIENT.getName()));
         }};
 
-        return new AuthUserDetails(client.getEmail(), client.getPassword(), authorities);
-    }
-
-    public static AuthUserDetails build(Admin admin) {
-        List<GrantedAuthority> authorities = new ArrayList<>() {{
-            add(new SimpleGrantedAuthority(Role.ADMIN.getName()));
-        }};
-
-        return new AuthUserDetails(admin.getName(), admin.getPassword(), authorities);
+        return new AuthUserDetails(user.getEmail(), user.getPassword(), authorities);
     }
 
     @Override
