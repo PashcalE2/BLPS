@@ -33,7 +33,7 @@ public class UserService implements UserServiceInterface {
 
     @Override
     public void attachClientCard(Long userId, Long cardId) {
-        userRepository.updateClientCard(userId, cardId);
+        userRepository.attachClientCard(userId, cardId);
     }
 
     @Override
