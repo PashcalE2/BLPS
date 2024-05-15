@@ -32,8 +32,8 @@ public class UserService implements UserServiceInterface {
     }
 
     @Override
-    public void attachClientCard(Long userId, Long cardId) {
-        userRepository.attachClientCard(userId, cardId);
+    public void attachClientCard(Long userId, String serialNumber, String validityDate, String cvv) {
+        userRepository.attachClientCard(userId, serialNumber, validityDate, cvv);
     }
 
     @Override

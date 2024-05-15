@@ -16,7 +16,7 @@ public interface UserServiceInterface {
 
     Optional<BankCard> findBankCardByUserId(Long userId);
 
-    void attachClientCard(Long userId, Long cardId);
+    void attachClientCard(Long userId, String serialNumber, String validityDate, String cvv);
 
     void courseSignUp(Long clientId, Long courseId);
 

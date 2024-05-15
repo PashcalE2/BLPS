@@ -112,18 +112,18 @@ public class ClientController {
     public @ResponseBody ResponseEntity<?> attachDebitCard(
             @RequestParam(defaultValue = "0") Long userId,
             @RequestParam String cardSerial,
-            @RequestParam String cardValidity,
+            @RequestParam String cardValidityDate,
             @RequestParam String cardCvv
     ) throws ClientCardDataUpdateException {
 
         try {
-            userService.attachClientCard(userId, 0l);
+            userService.attachClientCard(userId, cardSerial, cardValidityDate, cardCvv);
         }
         catch (RuntimeException e) {
-            throw new ClientCardDataUpdateException(userId, cardSerial, cardValidity, cardCvv);
+            throw new ClientCardDataUpdateException(userId, cardSerial, cardValidityDate, cardCvv);
         }
 
-        log.info(String.format("Данные карты клиента (%d) обновлены:\n%s\n%s\n%s\n", userId, cardSerial, cardValidity, cardCvv));
+        log.info(String.format("Данные карты клиента (%d) обновлены:\n%s\n%s\n%s\n", userId, cardSerial, cardValidityDate, cardCvv));
         return new ResponseEntity<>("Данные обновлены", HttpStatus.OK);
     }
 

@@ -25,8 +25,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<BankCard> findBankCardByUserId(Long userId);
 
     @Modifying
-    @Query(value = "update \"BankCard\" set user_id = :userId where serial_number = :serialNumber", nativeQuery = true)
-    void attachClientCard(Long userId, String serialNumber);
+    @Query(value = "call \"attach_user_card\"(:userId, :serialNumber, :validityDate, :cvv)", nativeQuery = true)
+    void attachClientCard(Long userId, String serialNumber, String validityDate, String cvv);
 
     @Modifying
     @Query(value = "insert into \"UsersCourses\" (user_id, course_id) values (:userId, :courseId)", nativeQuery = true)
