@@ -17,6 +17,7 @@ create table if not exists "RefreshToken"(
     expires_at timestamp not null
 );
 
+// ne nado
 create table if not exists "UserBan"(
     id bigserial primary key,
     user_id bigint references "User"(id) not null,

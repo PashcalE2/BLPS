@@ -1,5 +1,6 @@
 package main.blps_lab2.service;
 
+import main.blps_lab2.data.BankCard;
 import main.blps_lab2.data.RoleEnum;
 import main.blps_lab2.data.User;
 import main.blps_lab2.data.CourseInterface;
@@ -24,6 +25,11 @@ public class UserService implements UserServiceInterface {
     @Override
     public Optional<User> findUserByEmailAndPassword(String email, String password) {
         return userRepository.findUserByEmailAndPassword(email, password);
+    }
+
+    @Override
+    public Optional<BankCard> findBankCardByUserId(Long userId) {
+        return userRepository.findBankCardByUserId(userId);
     }
 
     @Override

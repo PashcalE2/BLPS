@@ -12,7 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.annotation.ApplicationScope;
 
-@Controller
+@RestController
 @CrossOrigin
 @ApplicationScope
 @RequestMapping(value = "/public")
@@ -25,14 +25,14 @@ public class PublicController {
     private CourseServiceInterface courseService;
 
     @GetMapping(value = "/get_courses")
-    public @ResponseBody ResponseEntity<?> getCoursesByName(
+    public ResponseEntity<?> getCoursesByName(
             @RequestParam String name
     ) {
         return new ResponseEntity<>(courseService.getCoursesByName(name), HttpStatus.OK);
     }
 
     @PostMapping(value = "/register")
-    public @ResponseBody ResponseEntity<?> register(
+    public ResponseEntity<?> register(
             @RequestParam String email,
             @RequestParam String password
     ) throws ClientRegisterException {
@@ -47,5 +47,10 @@ public class PublicController {
 
         log.info(String.format("Зарегистрирован пользователь:\n%s\n%s\n", email, password));
         return new ResponseEntity<>("Пользователь зарегистрирован", HttpStatus.OK);
+    }
+
+    @GetMapping(value = "")
+    public ResponseEntity<?> login() {
+        return new ResponseEntity<>("", HttpStatus.OK);
     }
 }
