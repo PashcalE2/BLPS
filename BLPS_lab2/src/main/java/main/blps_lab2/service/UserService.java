@@ -1,10 +1,10 @@
 package main.blps_lab2.service;
 
-import main.blps_lab2.data.BankCard;
 import main.blps_lab2.data.RoleEnum;
 import main.blps_lab2.data.User;
 import main.blps_lab2.data.CourseInterface;
 import main.blps_lab2.repository.UserRepository;
+import main.blps_lab2.service.interfaces.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +18,7 @@ public class UserService implements UserServiceInterface {
 
     @Override
     public void registerUser(String email, String password, RoleEnum role) {
-        userRepository.registerClient(email, password, role);
+        userRepository.registerUser(email, password, role);
     }
 
     @Override
@@ -27,32 +27,12 @@ public class UserService implements UserServiceInterface {
     }
 
     @Override
-    public Optional<BankCard> findBankCardByUserId(Long userId) {
-        return userRepository.findBankCardByUserId(userId);
+    public void banUser(Long userId) {
+
     }
 
     @Override
-    public void attachClientCard(Long userId, String serialNumber, String validityDate, String cvv) {
-        userRepository.attachClientCard(userId, serialNumber, validityDate, cvv);
-    }
+    public void unbanUser(Long userId) {
 
-    @Override
-    public void courseSignUp(Long clientId, Long courseId) {
-        userRepository.courseSignUp(clientId, courseId);
-    }
-
-    @Override
-    public List<CourseInterface> getCoursesByName(String name) {
-        return userRepository.getCoursesByName(name);
-    }
-
-    @Override
-    public Optional<CourseInterface> getCourseById(Long courseId) {
-        return userRepository.getCourseById(courseId);
-    }
-
-    @Override
-    public Boolean isUserSignedUpForCourse(Long clientId, Long courseId) {
-        return userRepository.isUserSignedUpForCourse(clientId, courseId);
     }
 }

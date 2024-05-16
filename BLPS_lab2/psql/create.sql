@@ -10,6 +10,13 @@ create table if not exists "User"(
     role "RoleEnum" not null
 );
 
+create table if not exists "RefreshToken"(
+    id bigserial primary key,
+    user_id bigint references "User"(id) not null,
+    token text unique not null,
+    expires_at timestamp not null
+);
+
 create table if not exists "UserBan"(
     id bigserial primary key,
     user_id bigint references "User"(id) not null,

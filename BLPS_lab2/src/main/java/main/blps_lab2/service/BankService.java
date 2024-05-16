@@ -1,6 +1,7 @@
 package main.blps_lab2.service;
 
 import main.blps_lab2.repository.BankRepository;
+import main.blps_lab2.service.interfaces.BankServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

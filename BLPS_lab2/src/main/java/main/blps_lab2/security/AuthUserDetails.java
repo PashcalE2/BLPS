@@ -1,5 +1,6 @@
 package main.blps_lab2.security;
 
+import main.blps_lab2.data.RoleEnum;
 import main.blps_lab2.data.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -22,7 +23,7 @@ public class AuthUserDetails implements UserDetails {
 
     public static AuthUserDetails build(User user) {
         List<GrantedAuthority> authorities = new ArrayList<>() {{
-            add(new SimpleGrantedAuthority(Role.CLIENT.getName()));
+            add(new SimpleGrantedAuthority(RoleEnum.CLIENT.getAuthority()));
         }};
 
         return new AuthUserDetails(user.getEmail(), user.getPassword(), authorities);

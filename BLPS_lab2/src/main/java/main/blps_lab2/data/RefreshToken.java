@@ -11,25 +11,21 @@ import java.sql.Timestamp;
 @EqualsAndHashCode
 @Getter
 @Setter
-public class UserBan {
+public class RefreshToken {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", nullable = false)
     private Long id;
 
     @Basic
-    @Column(name = "user_id", nullable = true)
+    @Column(name = "user_id", nullable = false)
     private Long userId;
 
     @Basic
-    @Column(name = "banned_on", nullable = false)
-    private Timestamp bannedOn;
+    @Column(name = "token", nullable = false, length = -1)
+    private String token;
 
     @Basic
-    @Column(name = "unban_on", nullable = true)
-    private Timestamp unbanOn;
-
-    @Basic
-    @Column(name = "comment", nullable = true, length = -1)
-    private String comment;
+    @Column(name = "expires_at", nullable = false)
+    private Timestamp expiresAt;
 }

@@ -12,7 +12,7 @@ import lombok.Setter;
 public class Course {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @jakarta.persistence.Column(name = "id", nullable = false)
+    @Column(name = "id", nullable = false)
     private Long id;
 
     @Basic

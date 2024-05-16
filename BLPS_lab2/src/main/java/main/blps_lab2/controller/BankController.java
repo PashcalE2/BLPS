@@ -2,7 +2,7 @@ package main.blps_lab2.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import main.blps_lab2.exception.NotEnoughMoneyOnCardException;
-import main.blps_lab2.service.BankServiceInterface;
+import main.blps_lab2.service.interfaces.BankServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
