@@ -3,13 +3,16 @@ package main.blps_lab2.data;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Entity
+@Table(name = "User")
+@RequiredArgsConstructor
 @EqualsAndHashCode
 @Getter
 @Setter
-public class User {
+public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", nullable = false)
@@ -27,4 +30,8 @@ public class User {
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
     private RoleEnum role;
+
+    @Basic
+    @Column(name = "banned", nullable = false)
+    private Boolean banned;
 }

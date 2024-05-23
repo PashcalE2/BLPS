@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
+@Table(name = "BankCard")
 @EqualsAndHashCode
 @Getter
 @Setter

@@ -7,7 +7,8 @@ create table if not exists "User"(
     id bigserial primary key,
     email text unique not null check (email ~ '\w+@\w+\.\w+'),
     password text not null,
-    role "RoleEnum" not null
+    role "RoleEnum" not null,
+    banned bool not null
 );
 
 create table if not exists "RefreshToken"(
@@ -15,15 +16,6 @@ create table if not exists "RefreshToken"(
     user_id bigint references "User"(id) not null,
     token text unique not null,
     expires_at timestamp not null
-);
-
-// ne nado
-create table if not exists "UserBan"(
-    id bigserial primary key,
-    user_id bigint references "User"(id) not null,
-    banned_on timestamp not null,
-    unban_on timestamp,
-    comment text
 );
 
 create table if not exists "BankCard"(

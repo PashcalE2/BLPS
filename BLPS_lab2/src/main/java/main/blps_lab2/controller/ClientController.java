@@ -3,8 +3,7 @@ package main.blps_lab2.controller;
 import lombok.extern.slf4j.Slf4j;
 import main.blps_lab2.data.BankCard;
 import main.blps_lab2.data.Course;
-import main.blps_lab2.data.User;
-import main.blps_lab2.data.CourseInterface;
+import main.blps_lab2.data.UserEntity;
 import main.blps_lab2.exception.*;
 import main.blps_lab2.service.interfaces.ClientServiceInterface;
 import main.blps_lab2.service.interfaces.CourseServiceInterface;
@@ -53,11 +52,11 @@ public class ClientController {
         }
         Course course = db_course.get();
 
-        Optional<User> db_client = userService.findUserByEmailAndPassword(email, password);
+        Optional<UserEntity> db_client = userService.findUserByEmail(email);
         if (db_client.isEmpty()) {
             throw new ClientNotFoundException(email, password);
         }
-        User client = db_client.get();
+        UserEntity client = db_client.get();
 
         if (clientService.isClientSignedUpForCourse(client.getId(), course.getId())) {
             throw new ClientAlreadySignedUpException(client.getId(), course.getId());

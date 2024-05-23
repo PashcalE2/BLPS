@@ -6,10 +6,11 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
+@Table(name = "UsersCourses")
 @EqualsAndHashCode
 @Getter
 @Setter
-@jakarta.persistence.IdClass(main.blps_lab2.data.UsersCoursesPK.class)
+@IdClass(main.blps_lab2.data.UsersCoursesPK.class)
 public class UsersCourses {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id

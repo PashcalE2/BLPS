@@ -1,11 +1,11 @@
 drop type if exists
-    RoleEnum
+    "RoleEnum"
     cascade;
 
 drop table if exists
-    Client,
-    ClientBan,
-    BankCard,
-    Course,
-    ClientsCourses
+    "User",
+    "RefreshToken",
+    "BankCard",
+    "Course",
+    "UsersCourses"
     cascade;
