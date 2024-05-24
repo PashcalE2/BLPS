@@ -8,7 +8,6 @@ import main.blps_lab2.service.interfaces.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.annotation.ApplicationScope;
 
@@ -49,8 +48,13 @@ public class PublicController {
         return new ResponseEntity<>("Пользователь зарегистрирован", HttpStatus.OK);
     }
 
-    @GetMapping(value = "")
+    @GetMapping(value = "/login")
     public ResponseEntity<?> login() {
+        return new ResponseEntity<>("", HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/refresh")
+    public ResponseEntity<?> refresh() {
         return new ResponseEntity<>("", HttpStatus.OK);
     }
 }
