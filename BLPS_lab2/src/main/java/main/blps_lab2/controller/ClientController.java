@@ -1,5 +1,6 @@
 package main.blps_lab2.controller;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import main.blps_lab2.data.BankCard;
 import main.blps_lab2.data.Course;
@@ -28,16 +29,12 @@ import java.util.Optional;
 @CrossOrigin
 @ApplicationScope
 @RequestMapping(value = "/client")
+@RequiredArgsConstructor
 @Slf4j
 public class ClientController {
-    @Autowired
-    private UserServiceInterface userService;
-
-    @Autowired
-    private ClientServiceInterface clientService;
-
-    @Autowired
-    private CourseServiceInterface courseService;
+    private final UserServiceInterface userService;
+    private final ClientServiceInterface clientService;
+    private final CourseServiceInterface courseService;
 
     @PreAuthorize("hasAuthority('CLIENT')")
     @PostMapping(value = "/course_sign_up")
@@ -52,7 +49,7 @@ public class ClientController {
         }
         Course course = db_course.get();
 
-        Optional<UserEntity> db_client = userService.findUserByEmail(email);
+        Optional<UserEntity> db_client = userService.findByEmail(email);
         if (db_client.isEmpty()) {
             throw new ClientNotFoundException(email, password);
         }

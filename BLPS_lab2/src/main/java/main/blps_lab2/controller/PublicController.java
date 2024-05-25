@@ -1,11 +1,17 @@
 package main.blps_lab2.controller;
 
+import jakarta.security.auth.message.AuthException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import main.blps_lab2.data.RoleEnum;
+import main.blps_lab2.exception.ClientAlreadyRegisteredException;
 import main.blps_lab2.exception.ClientRegisterException;
+import main.blps_lab2.security.JwtRequest;
+import main.blps_lab2.security.JwtResponse;
+import main.blps_lab2.security.RefreshJwtRequest;
+import main.blps_lab2.service.AuthService;
 import main.blps_lab2.service.interfaces.CourseServiceInterface;
 import main.blps_lab2.service.interfaces.UserServiceInterface;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,13 +21,12 @@ import org.springframework.web.context.annotation.ApplicationScope;
 @CrossOrigin
 @ApplicationScope
 @RequestMapping(value = "/public")
+@RequiredArgsConstructor
 @Slf4j
 public class PublicController {
-    @Autowired
-    private UserServiceInterface userService;
-
-    @Autowired
-    private CourseServiceInterface courseService;
+    private final AuthService authService;
+    private final UserServiceInterface userService;
+    private final CourseServiceInterface courseService;
 
     @GetMapping(value = "/get_courses")
     public ResponseEntity<?> getCoursesByName(
@@ -34,27 +39,26 @@ public class PublicController {
     public ResponseEntity<?> register(
             @RequestParam String email,
             @RequestParam String password
-    ) throws ClientRegisterException {
-
-        try {
-            userService.registerUser(email, password, RoleEnum.CLIENT);
-        }
-        catch (RuntimeException e) {
-            log.error(e.getMessage());
-            throw new ClientRegisterException(email);
-        }
-
-        log.info(String.format("Зарегистрирован пользователь:\n%s\n%s\n", email, password));
+    ) throws ClientAlreadyRegisteredException, ClientRegisterException {
+        userService.registerUser(email, password, RoleEnum.CLIENT);
         return new ResponseEntity<>("Пользователь зарегистрирован", HttpStatus.OK);
     }
 
-    @GetMapping(value = "/login")
-    public ResponseEntity<?> login() {
-        return new ResponseEntity<>("", HttpStatus.OK);
+    @PostMapping(value = "/login")
+    public ResponseEntity<?> login(@RequestBody JwtRequest jwtRequest) throws AuthException {
+        JwtResponse jwtResponse = authService.login(jwtRequest);
+        return new ResponseEntity<>(jwtResponse, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/refresh")
-    public ResponseEntity<?> refresh() {
-        return new ResponseEntity<>("", HttpStatus.OK);
+    @PostMapping(value = "/access")
+    public ResponseEntity<?> newAccessToken(@RequestBody RefreshJwtRequest refreshJwtRequest) throws AuthException {
+        JwtResponse jwtResponse = authService.getNewAccessToken(refreshJwtRequest);
+        return new ResponseEntity<>(jwtResponse, HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/refresh")
+    public ResponseEntity<?> newRefreshToken(@RequestBody RefreshJwtRequest refreshJwtRequest) throws AuthException {
+        JwtResponse jwtResponse = authService.getNewRefreshToken(refreshJwtRequest);
+        return new ResponseEntity<>(jwtResponse, HttpStatus.OK);
     }
 }

@@ -4,7 +4,6 @@ drop type if exists
 
 drop table if exists
     "User",
-    "RefreshToken",
     "BankCard",
     "Course",
     "UsersCourses"

@@ -1,13 +1,11 @@
 package main.blps_lab2.data;
 
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(name = "User")
+@AllArgsConstructor
 @RequiredArgsConstructor
 @EqualsAndHashCode
 @Getter

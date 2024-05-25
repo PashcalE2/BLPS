@@ -1,11 +1,13 @@
 package main.blps_lab2.repository;
 
+import main.blps_lab2.data.UsersCourses;
+import main.blps_lab2.data.UsersCoursesPK;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.stereotype.Repository;
 
-@Repository
-public interface UsersCoursesRepository {
+
+public interface UsersCoursesRepository extends JpaRepository<UsersCourses, UsersCoursesPK> {
     @Query(value = "select (select count(*) from \"UsersCourses\" where user_id = :clientId and course_id = :courseId) = 1", nativeQuery = true)
     Boolean isClientSignedUpForCourse(Long clientId, Long courseId);
 

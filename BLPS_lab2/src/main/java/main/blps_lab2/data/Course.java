@@ -1,12 +1,12 @@
 package main.blps_lab2.data;
 
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(name = "Course")
+@AllArgsConstructor
+@RequiredArgsConstructor
 @EqualsAndHashCode
 @Getter
 @Setter

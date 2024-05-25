@@ -1,21 +1,19 @@
 package main.blps_lab2.service;
 
+import lombok.RequiredArgsConstructor;
 import main.blps_lab2.data.BankCard;
 import main.blps_lab2.repository.UserRepository;
 import main.blps_lab2.repository.UsersCoursesRepository;
 import main.blps_lab2.service.interfaces.ClientServiceInterface;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class ClientService implements ClientServiceInterface {
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private UsersCoursesRepository usersCoursesRepository;
+    private final UserRepository userRepository;
+    private final UsersCoursesRepository usersCoursesRepository;
 
     @Override
     public Optional<BankCard> findBankCardByClientId(Long clientId) {

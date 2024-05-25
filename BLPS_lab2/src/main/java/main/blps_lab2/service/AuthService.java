@@ -6,10 +6,7 @@ import jakarta.security.auth.message.AuthException;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import main.blps_lab2.data.UserEntity;
-import main.blps_lab2.security.JwtAuth;
-import main.blps_lab2.security.JwtRequest;
-import main.blps_lab2.security.JwtResponse;
-import main.blps_lab2.security.JwtUtils;
+import main.blps_lab2.security.*;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +21,7 @@ public class AuthService {
     private final JwtUtils jwtUtils;
 
     public JwtResponse login(@NonNull JwtRequest authRequest) throws AuthException {
-        UserEntity userEntity = userService.findUserByEmail(authRequest.getLogin())
+        UserEntity userEntity = userService.findByEmail(authRequest.getLogin())
                 .orElseThrow(() -> new AuthException("Пользователь не найден"));
 
         if (userEntity.getPassword().equals(authRequest.getPassword())) {
@@ -37,13 +34,15 @@ public class AuthService {
         }
     }
 
-    public JwtResponse getAccessToken(@NonNull String refreshToken) throws AuthException {
+    public JwtResponse getNewAccessToken(@NonNull RefreshJwtRequest refreshJwtRequest) throws AuthException {
+        String refreshToken = refreshJwtRequest.getRefreshToken();
+
         if (jwtUtils.validateRefreshToken(refreshToken)) {
             final Claims claims = jwtUtils.getRefreshClaims(refreshToken);
             final String login = claims.getSubject();
             final String saveRefreshToken = refreshStorage.get(login);
             if (saveRefreshToken != null && saveRefreshToken.equals(refreshToken)) {
-                final UserEntity userEntity = userService.findUserByEmail(login)
+                final UserEntity userEntity = userService.findByEmail(login)
                         .orElseThrow(() -> new AuthException("Пользователь не найден"));
                 final String accessToken = jwtUtils.generateAccessToken(userEntity);
                 return new JwtResponse(accessToken, null);
@@ -52,13 +51,15 @@ public class AuthService {
         return new JwtResponse(null, null);
     }
 
-    public JwtResponse refresh(@NonNull String refreshToken) throws AuthException {
+    public JwtResponse getNewRefreshToken(@NonNull RefreshJwtRequest refreshJwtRequest) throws AuthException {
+        String refreshToken = refreshJwtRequest.getRefreshToken();
+
         if (jwtUtils.validateRefreshToken(refreshToken)) {
             final Claims claims = jwtUtils.getRefreshClaims(refreshToken);
             final String login = claims.getSubject();
             final String saveRefreshToken = refreshStorage.get(login);
             if (saveRefreshToken != null && saveRefreshToken.equals(refreshToken)) {
-                final UserEntity userEntity = userService.findUserByEmail(login)
+                final UserEntity userEntity = userService.findByEmail(login)
                         .orElseThrow(() -> new AuthException("Пользователь не найден"));
                 final String accessToken = jwtUtils.generateAccessToken(userEntity);
                 final String newRefreshToken = jwtUtils.generateRefreshToken(userEntity);
