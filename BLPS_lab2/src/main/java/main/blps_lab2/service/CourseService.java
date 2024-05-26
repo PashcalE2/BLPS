@@ -19,7 +19,7 @@ public class CourseService implements CourseServiceInterface {
 
     @Override
     public void save(Course course) {
-        courseRepository.save(course);
+        courseRepository.saveAndFlush(course);
     }
 
     @Override

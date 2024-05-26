@@ -1,4 +1,4 @@
-package main.blps_lab2.security;
+package main.blps_lab2.security.jwt;
 
 import lombok.Getter;
 import lombok.Setter;

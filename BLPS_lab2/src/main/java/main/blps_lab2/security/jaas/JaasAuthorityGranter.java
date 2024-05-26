@@ -1,9 +1,10 @@
-package main.blps_lab2.security;
+package main.blps_lab2.security.jaas;
 
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import main.blps_lab2.data.UserEntity;
 import main.blps_lab2.exception.ClientNotFoundException;
+import main.blps_lab2.repository.UserRepository;
 import main.blps_lab2.repository.XMLUserRepository;
 import org.springframework.security.authentication.jaas.AuthorityGranter;
 
@@ -13,7 +14,7 @@ import java.util.Set;
 
 @RequiredArgsConstructor
 public class JaasAuthorityGranter implements AuthorityGranter {
-    private final XMLUserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Override
     @SneakyThrows

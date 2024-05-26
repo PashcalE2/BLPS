@@ -1,4 +1,4 @@
-package main.blps_lab2.security;
+package main.blps_lab2.security.jwt;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -35,6 +35,8 @@ public class AuthorizationTokenFilter extends OncePerRequestFilter {
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+
+                log.info(userDetails.getAuthorities().stream().toList().toString());
             }
         } catch (Exception e) {
             log.error("Cannot set authentication: {}", e.getMessage());
@@ -49,6 +51,8 @@ public class AuthorizationTokenFilter extends OncePerRequestFilter {
         if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
             return headerAuth.substring(7);
         }
+
+        log.warn("Неправильный заголовок Authorization (нужно: Authorization | Bearer <token>)");
 
         return null;
     }

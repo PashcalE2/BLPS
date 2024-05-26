@@ -1,11 +1,11 @@
-package main.blps_lab2.security;
+package main.blps_lab2.security.jaas;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import main.blps_lab2.data.UserEntity;
 import main.blps_lab2.exception.ClientNotFoundXMLException;
-import main.blps_lab2.repository.XMLUserRepository;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import main.blps_lab2.repository.UserRepository;
+import main.blps_lab2.security.MainPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.security.auth.Subject;
@@ -26,14 +26,16 @@ public class JaasLoginModule implements LoginModule {
     private boolean loginSucceeded = false;
     private Subject subject;
     private CallbackHandler callbackHandler;
-    private XMLUserRepository userRepository;
+    private UserRepository userRepository;
 
     @Override
     public void initialize(Subject subject, CallbackHandler callbackHandler, Map<String, ?> sharedState, Map<String, ?> options) {
+        log.info(String.format("JaasLoginModule создается... %s", subject.toString()));
+
         this.callbackHandler = callbackHandler;
         this.subject = subject;
-        this.userRepository = (XMLUserRepository) options.get("userRepository");
-        this.passwordEncoder = new BCryptPasswordEncoder();
+        this.userRepository = (UserRepository) options.get("userRepository");
+        this.passwordEncoder = new MainPasswordEncoder();
     }
 
     @Override

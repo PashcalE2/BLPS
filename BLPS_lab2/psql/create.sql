@@ -1,6 +1,6 @@
 create type "RoleEnum" as enum (
-    'ADMIN',
-    'CLIENT'
+    'ROLE_ADMIN',
+    'ROLE_CLIENT'
 );
 
 create table if not exists "User"(

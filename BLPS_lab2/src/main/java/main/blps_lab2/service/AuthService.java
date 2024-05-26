@@ -5,8 +5,10 @@ import io.jsonwebtoken.Claims;
 import jakarta.security.auth.message.AuthException;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import main.blps_lab2.data.UserEntity;
-import main.blps_lab2.security.*;
+import main.blps_lab2.security.MainPasswordEncoder;
+import main.blps_lab2.security.jwt.*;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -14,17 +16,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class AuthService {
     private final UserService userService;
     private final Map<String, String> refreshStorage = new HashMap<>();
     private final JwtUtils jwtUtils;
+    private final MainPasswordEncoder passwordEncoder = new MainPasswordEncoder();
 
     public JwtResponse login(@NonNull JwtRequest authRequest) throws AuthException {
         UserEntity userEntity = userService.findByEmail(authRequest.getLogin())
                 .orElseThrow(() -> new AuthException("Пользователь не найден"));
 
-        if (userEntity.getPassword().equals(authRequest.getPassword())) {
+        if (passwordEncoder.matches(authRequest.getPassword(), userEntity.getPassword())) {
             final String accessToken = jwtUtils.generateAccessToken(userEntity);
             final String refreshToken = jwtUtils.generateRefreshToken(userEntity);
             refreshStorage.put(userEntity.getEmail(), refreshToken);

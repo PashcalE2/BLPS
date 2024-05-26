@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface UserServiceInterface {
 
-    void registerUser(String email, String password, RoleEnum role) throws ClientAlreadyRegisteredException, ClientRegisterException;
+    void registerUser(String email, String rawPassword, RoleEnum role) throws ClientAlreadyRegisteredException, ClientRegisterException;
 
     Optional<UserEntity> findByEmail(String email);
 

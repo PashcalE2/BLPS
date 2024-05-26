@@ -1,6 +1,8 @@
-package main.blps_lab2.security;
+package main.blps_lab2.security.jaas;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import main.blps_lab2.repository.UserRepository;
 import main.blps_lab2.repository.XMLUserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,9 +15,10 @@ import javax.security.auth.login.AppConfigurationEntry;
 import java.util.Map;
 
 @Configuration
+@Slf4j
 @RequiredArgsConstructor
 public class JaasConfig {
-    private final XMLUserRepository xmlUserRepository;
+    private final UserRepository xmlUserRepository;
 
     @Bean
     public InMemoryConfiguration configuration() {
