@@ -28,6 +28,8 @@ public class AuthService {
         UserEntity userEntity = userService.findByEmail(authRequest.getLogin())
                 .orElseThrow(() -> new AuthException("Пользователь не найден"));
 
+        log.info(String.format("Проверка пароля: %s", passwordEncoder.encode(authRequest.getPassword())));
+
         if (passwordEncoder.matches(authRequest.getPassword(), userEntity.getPassword())) {
             final String accessToken = jwtUtils.generateAccessToken(userEntity);
             final String refreshToken = jwtUtils.generateRefreshToken(userEntity);

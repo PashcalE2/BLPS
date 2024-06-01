@@ -22,16 +22,21 @@ public class JaasConfig {
 
     @Bean
     public InMemoryConfiguration configuration() {
+        log.info("JAAS: вызвана конфигурация");
+
         AppConfigurationEntry configEntry = new AppConfigurationEntry(JaasLoginModule.class.getName(),
                 AppConfigurationEntry.LoginModuleControlFlag.REQUIRED,
                 Map.of("userRepository", xmlUserRepository));
-        var configurationEntries = new AppConfigurationEntry[] { configEntry };
+
+        AppConfigurationEntry[] configurationEntries = new AppConfigurationEntry[] { configEntry };
         return new InMemoryConfiguration(Map.of("SPRINGSECURITY", configurationEntries));
     }
 
     @Bean
     public AbstractJaasAuthenticationProvider jaasAuthenticationProvider(javax.security.auth.login.Configuration configuration) {
-        var provider = new DefaultJaasAuthenticationProvider();
+        log.info("JAAS: jaasAuthProvider СОЗДАН");
+
+        DefaultJaasAuthenticationProvider provider = new DefaultJaasAuthenticationProvider();
         provider.setConfiguration(configuration);
         provider.setAuthorityGranters(new AuthorityGranter[] { new JaasAuthorityGranter(xmlUserRepository) });
         return provider;

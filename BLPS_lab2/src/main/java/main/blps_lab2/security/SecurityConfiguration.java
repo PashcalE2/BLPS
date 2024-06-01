@@ -1,7 +1,6 @@
 package main.blps_lab2.security;
 
 import lombok.RequiredArgsConstructor;
-import main.blps_lab2.data.RoleEnum;
 import main.blps_lab2.security.jwt.AuthorizationTokenFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,6 +21,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfiguration {
     private final AbstractJaasAuthenticationProvider jaasAuthenticationProvider;
+    private final AuthenticationManager authenticationManager;
     private final AuthorizationTokenFilter authorizationTokenFilter;
 
     @Bean
@@ -29,11 +29,12 @@ public class SecurityConfiguration {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authenticationProvider(jaasAuthenticationProvider)
+                .authenticationManager(authenticationManager)
                 .addFilterAfter(authorizationTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
                         authorizationManagerRequestMatcherRegistry
-                                .requestMatchers("/admin/**").hasRole(RoleEnum.ADMIN.getAuthority())
-                                .requestMatchers("/client/**").hasAnyRole(RoleEnum.CLIENT.getAuthority(), RoleEnum.ADMIN.getAuthority())
+                                .requestMatchers("/admin/**").authenticated()
+                                .requestMatchers("/client/**").authenticated()
                                 .requestMatchers("/public/**").permitAll()
                                 .anyRequest().permitAll())
                 .build();
@@ -42,11 +43,6 @@ public class SecurityConfiguration {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new MainPasswordEncoder();
-    }
-
-    @Bean
-    public AuthorizationTokenFilter authenticationJwtTokenFilter() {
-        return authorizationTokenFilter;
     }
 
     @Bean
