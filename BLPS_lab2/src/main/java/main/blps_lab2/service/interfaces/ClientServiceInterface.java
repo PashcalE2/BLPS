@@ -1,16 +1,11 @@
 package main.blps_lab2.service.interfaces;
 
-import main.blps_lab2.data.BankCard;
-import main.blps_lab2.exception.ClientCardDataUpdateException;
-
-import java.util.Optional;
+import main.blps_lab2.dto.BankCardCredentials;
+import main.blps_lab2.exception.*;
+import org.springframework.security.core.Authentication;
 
 public interface ClientServiceInterface {
-    Optional<BankCard> findBankCardByClientId(Long clientId);
+    void courseSignUp(Authentication auth, Long courseId) throws CourseNotFoundException, ClientAlreadySignedUpException, ClientCardDataIsMissingException, CantRequestBankException, NotEnoughMoneyOnCardException, UserNotFoundException, UserIsBannedException;
 
-    void attachClientCard(Long userId, String serialNumber, String validityDate, String cvv) throws ClientCardDataUpdateException;
-
-    void courseSignUp(Long clientId, Long courseId);
-
-    Boolean isClientSignedUpForCourse(Long clientId, Long courseId);
+    void attachClientCard(Authentication auth, BankCardCredentials bankCardCredentials) throws ClientCardDataUpdateException, UserNotFoundException;
 }

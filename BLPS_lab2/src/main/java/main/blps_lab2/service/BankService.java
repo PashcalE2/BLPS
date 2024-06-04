@@ -1,17 +1,17 @@
 package main.blps_lab2.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import main.blps_lab2.exception.NotEnoughMoneyOnCardException;
 import main.blps_lab2.repository.BankRepository;
 import main.blps_lab2.service.interfaces.BankServiceInterface;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class BankService implements BankServiceInterface {
-    @Autowired
-    private BankRepository bankRepository;
+    private final BankRepository bankRepository;
 
     @Override
     public void removeMoney(Long cardId, Integer money) throws NotEnoughMoneyOnCardException {

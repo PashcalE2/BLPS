@@ -1,22 +1,15 @@
 package main.blps_lab2.service.interfaces;
 
-import main.blps_lab2.data.BankCard;
-import main.blps_lab2.data.RoleEnum;
-import main.blps_lab2.data.UserEntity;
-import main.blps_lab2.exception.ClientAlreadyRegisteredException;
-import main.blps_lab2.exception.ClientRegisterException;
+import main.blps_lab2.exception.UserAlreadyRegisteredException;
+import main.blps_lab2.exception.UserRegisterException;
+import main.blps_lab2.model.RoleEnum;
+import main.blps_lab2.model.UserEntity;
 
 import java.util.Optional;
 
 public interface UserServiceInterface {
 
-    void registerUser(String email, String rawPassword, RoleEnum role) throws ClientAlreadyRegisteredException, ClientRegisterException;
+    void registerUser(String email, String rawPassword, RoleEnum role) throws UserAlreadyRegisteredException, UserRegisterException;
 
     Optional<UserEntity> findByEmail(String email);
-
-    Optional<BankCard> findBankCardByUserId(Long userId);
-
-    void banUser(Long userId);
-
-    void unbanUser(Long userId);
 }

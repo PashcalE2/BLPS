@@ -1,4 +1,4 @@
-package main.blps_lab2.data;
+package main.blps_lab2.model;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;

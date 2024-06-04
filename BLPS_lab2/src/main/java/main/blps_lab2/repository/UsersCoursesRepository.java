@@ -1,7 +1,7 @@
 package main.blps_lab2.repository;
 
-import main.blps_lab2.data.UsersCourses;
-import main.blps_lab2.data.UsersCoursesPK;
+import main.blps_lab2.model.UsersCourses;
+import main.blps_lab2.model.UsersCoursesPK;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

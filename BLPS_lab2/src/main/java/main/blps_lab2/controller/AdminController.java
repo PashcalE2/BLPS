@@ -2,49 +2,50 @@ package main.blps_lab2.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import main.blps_lab2.data.Course;
-import main.blps_lab2.service.CourseService;
-import main.blps_lab2.service.UserService;
+import main.blps_lab2.model.Course;
+import main.blps_lab2.service.interfaces.AdminServiceInterface;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.annotation.ApplicationScope;
 
-@Controller
+@RestController
 @CrossOrigin
 @ApplicationScope
 @RequestMapping(value = "/admin")
+@PreAuthorize(value = "hasAuthority('ADMIN')")
 @RequiredArgsConstructor
 @Slf4j
 public class AdminController {
-    private final UserService userService;
-    private final CourseService courseService;
+    private final AdminServiceInterface adminService;
 
     @PostMapping(value = "/ban_user")
     public ResponseEntity<?> banUser(@RequestParam(defaultValue = "0") Long userId) {
-        userService.banUser(userId);
-        return new ResponseEntity<>("Ok", HttpStatus.OK);
+        adminService.banUser(userId);
+        return new ResponseEntity<>(String.format("Пользователь %d забанен", userId), HttpStatus.OK);
     }
 
     @PostMapping(value = "/unban_user")
     public ResponseEntity<?> unbanUser(@RequestParam(defaultValue = "0") Long userId) {
-        userService.unbanUser(userId);
-        return new ResponseEntity<>("Ok", HttpStatus.OK);
+        adminService.unbanUser(userId);
+        return new ResponseEntity<>(String.format("Пользователь %d разбанен", userId), HttpStatus.OK);
     }
 
     @PostMapping(value = "/create_new_course")
     public ResponseEntity<?> createNewCourse(@RequestBody Course course) {
-        courseService.save(course);
+        adminService.createNewCourse(course);
         return new ResponseEntity<>("Ok", HttpStatus.OK);
     }
 
     @PostMapping(value = "/update_course")
     public ResponseEntity<?> updateCourseById(@RequestBody Course course) {
-        courseService.updateCourseById(course);
+        adminService.updateCourseById(course);
         return new ResponseEntity<>("Ok", HttpStatus.OK);
     }
 
-    @GetMapping(value = "/nothing")
-    public void nothing() {}
+    @PostMapping(value = "/load_users_from_db")
+    public ResponseEntity<?> loadUsersFromDB() {
+        return new ResponseEntity<>(String.format("Записано %d пользователей", adminService.loadUsersFromDB()), HttpStatus.OK);
+    }
 }

@@ -5,7 +5,9 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 import lombok.extern.slf4j.Slf4j;
-import main.blps_lab2.data.UserEntity;
+import main.blps_lab2.exception.TokenIsExpiredException;
+import main.blps_lab2.model.RoleEnum;
+import main.blps_lab2.model.UserEntity;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +17,10 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 @Slf4j
@@ -59,32 +65,38 @@ public class JwtUtils {
                 .compact();
     }
 
-    public boolean validateAccessToken(String accessToken) {
+    public boolean validateAccessToken(String accessToken) throws TokenIsExpiredException {
         return validateToken(accessToken, jwtAccessSecret);
     }
 
-    public boolean validateRefreshToken(String refreshToken) {
+    public boolean validateRefreshToken(String refreshToken) throws TokenIsExpiredException {
         return validateToken(refreshToken, jwtRefreshSecret);
     }
 
-    private boolean validateToken(String token, Key secret) {
+    private boolean validateToken(String token, Key secret) throws TokenIsExpiredException {
         try {
             Jwts.parserBuilder()
                     .setSigningKey(secret)
                     .build()
                     .parseClaimsJws(token);
             return true;
-        } catch (ExpiredJwtException expEx) {
-            log.error("Token expired", expEx);
-        } catch (UnsupportedJwtException unsEx) {
+        }
+        catch (ExpiredJwtException expEx) {
+            throw new TokenIsExpiredException(token);
+        }
+        catch (UnsupportedJwtException unsEx) {
             log.error("Unsupported jwt", unsEx);
-        } catch (MalformedJwtException mjEx) {
+        }
+        catch (MalformedJwtException mjEx) {
             log.error("Malformed jwt", mjEx);
-        } catch (SignatureException sEx) {
+        }
+        catch (SignatureException sEx) {
             log.error("Invalid signature", sEx);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             log.error("invalid token", e);
         }
+
         return false;
     }
 
@@ -102,5 +114,19 @@ public class JwtUtils {
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
+    }
+
+    public static JwtAuthentication generate(Claims claims) {
+        final JwtAuthentication jwtInfoToken = new JwtAuthentication();
+        jwtInfoToken.setAuthorities(new HashSet<RoleEnum>() {{
+            add(getRole(claims));
+        }});
+
+        jwtInfoToken.setEmail(claims.getSubject());
+        return jwtInfoToken;
+    }
+
+    private static RoleEnum getRole(Claims claims) {
+        return RoleEnum.valueOf(claims.get("role", String.class));
     }
 }

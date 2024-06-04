@@ -1,12 +1,11 @@
 package main.blps_lab2.security;
 
 import lombok.RequiredArgsConstructor;
-import main.blps_lab2.security.jwt.AuthorizationTokenFilter;
+import lombok.extern.slf4j.Slf4j;
+import main.blps_lab2.model.RoleEnum;
+import main.blps_lab2.security.jwt.JwtFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.jaas.AbstractJaasAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -17,24 +16,21 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true,securedEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true)
+@Slf4j
 @RequiredArgsConstructor
 public class SecurityConfiguration {
-    private final AbstractJaasAuthenticationProvider jaasAuthenticationProvider;
-    private final AuthenticationManager authenticationManager;
-    private final AuthorizationTokenFilter authorizationTokenFilter;
+    private final JwtFilter jwtFilter;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
-                .authenticationProvider(jaasAuthenticationProvider)
-                .authenticationManager(authenticationManager)
-                .addFilterAfter(authorizationTokenFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
                         authorizationManagerRequestMatcherRegistry
-                                .requestMatchers("/admin/**").authenticated()
-                                .requestMatchers("/client/**").authenticated()
+                                .requestMatchers("/admin/**").permitAll()
+                                .requestMatchers("/client/**").permitAll()
                                 .requestMatchers("/public/**").permitAll()
                                 .anyRequest().permitAll())
                 .build();
@@ -45,8 +41,4 @@ public class SecurityConfiguration {
         return new MainPasswordEncoder();
     }
 
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
-    }
 }

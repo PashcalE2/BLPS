@@ -2,6 +2,7 @@ package main.blps_lab2.security.jwt;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -9,9 +10,10 @@ import org.springframework.security.core.GrantedAuthority;
 import java.util.Collection;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
-public class JwtAuth implements Authentication {
+public class JwtAuthentication implements Authentication {
     private boolean authenticated;
     private String email;
     private String password;

@@ -18,7 +18,7 @@ import java.util.Map;
 @Slf4j
 @RequiredArgsConstructor
 public class JaasConfig {
-    private final UserRepository xmlUserRepository;
+    private final XMLUserRepository xmlUserRepository;
 
     @Bean
     public InMemoryConfiguration configuration() {
@@ -26,7 +26,7 @@ public class JaasConfig {
 
         AppConfigurationEntry configEntry = new AppConfigurationEntry(JaasLoginModule.class.getName(),
                 AppConfigurationEntry.LoginModuleControlFlag.REQUIRED,
-                Map.of("userRepository", xmlUserRepository));
+                Map.of("xmlUserRepository", xmlUserRepository));
 
         AppConfigurationEntry[] configurationEntries = new AppConfigurationEntry[] { configEntry };
         return new InMemoryConfiguration(Map.of("SPRINGSECURITY", configurationEntries));

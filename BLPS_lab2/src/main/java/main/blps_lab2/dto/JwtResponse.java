@@ -1,4 +1,4 @@
-package main.blps_lab2.security.jwt;
+package main.blps_lab2.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

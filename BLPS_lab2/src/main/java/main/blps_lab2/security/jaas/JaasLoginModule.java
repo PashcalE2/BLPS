@@ -2,9 +2,9 @@ package main.blps_lab2.security.jaas;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import main.blps_lab2.data.UserEntity;
-import main.blps_lab2.exception.ClientNotFoundXMLException;
-import main.blps_lab2.repository.UserRepository;
+import main.blps_lab2.exception.UserNotFoundException;
+import main.blps_lab2.model.UserEntity;
+import main.blps_lab2.repository.XMLUserRepository;
 import main.blps_lab2.security.MainPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -26,7 +26,7 @@ public class JaasLoginModule implements LoginModule {
     private boolean loginSucceeded = false;
     private Subject subject;
     private CallbackHandler callbackHandler;
-    private UserRepository userRepository;
+    private XMLUserRepository xmlUserRepository;
 
     @Override
     public void initialize(Subject subject, CallbackHandler callbackHandler, Map<String, ?> sharedState, Map<String, ?> options) {
@@ -34,7 +34,7 @@ public class JaasLoginModule implements LoginModule {
 
         this.callbackHandler = callbackHandler;
         this.subject = subject;
-        this.userRepository = (UserRepository) options.get("userRepository");
+        this.xmlUserRepository = (XMLUserRepository) options.get("xmlUserRepository");
         this.passwordEncoder = new MainPasswordEncoder();
     }
 
@@ -49,7 +49,7 @@ public class JaasLoginModule implements LoginModule {
         callbackHandler.handle(new Callback[] { nameCallback, passwordCallback });
         login = nameCallback.getName();
         String password = new String(passwordCallback.getPassword());
-        Optional<UserEntity> user = userRepository.findByEmail(login);
+        Optional<UserEntity> user = xmlUserRepository.findByEmail(login);
 
         if (user.isPresent()) {
             loginSucceeded = passwordEncoder.matches(password, user.get().getPassword());
@@ -64,7 +64,7 @@ public class JaasLoginModule implements LoginModule {
     @SneakyThrows
     public boolean commit() {
         if (!loginSucceeded) return false;
-        if (login == null) throw new ClientNotFoundXMLException(null);
+        if (login == null) throw new UserNotFoundException(null);
 
         log.info("Пользователь (%s) прошел аутентификацию");
         Principal principal = (UserPrincipal) () -> login;

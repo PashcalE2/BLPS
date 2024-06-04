@@ -3,7 +3,7 @@ package main.blps_lab2.repository;
 import com.thoughtworks.xstream.XStream;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import main.blps_lab2.data.UserEntity;
+import main.blps_lab2.model.UserEntity;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
@@ -46,16 +46,41 @@ public class XMLUserRepository {
         }
     }
 
-    @SneakyThrows
-    public Optional<UserEntity> findByEmail(String email) {
-        return getAll().stream()
-                .filter(elem -> email.equals(elem.getEmail()))
-                .findFirst();
-    }
-
     public void delete(UserEntity user) {
         List<UserEntity> users = getAll();
         users.remove(user);
+        saveAll(users);
+    }
+
+    public void deleteAll() {
+
+    }
+
+    public Optional<UserEntity> findByEmail(String email) {
+        return getAll().stream()
+                .filter(user -> email.equals(user.getEmail()))
+                .findFirst();
+    }
+
+    public void banUser(Long userId) {
+        setUserBan(userId, true);
+    }
+
+    public void unbanUser(Long userId) {
+        setUserBan(userId, false);
+    }
+
+    private void setUserBan(Long userId, Boolean banned) {
+        List<UserEntity> users = getAll();
+
+        UserEntity user = users.stream()
+                .filter(elem -> userId.equals(elem.getId()))
+                .findAny().orElseThrow();
+
+        users.remove(user);
+        user.setBanned(banned);
+        users.add(user);
+
         saveAll(users);
     }
 }

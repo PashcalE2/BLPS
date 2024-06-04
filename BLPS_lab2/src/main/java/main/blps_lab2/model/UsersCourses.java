@@ -1,4 +1,4 @@
-package main.blps_lab2.data;
+package main.blps_lab2.model;
 
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
@@ -10,7 +10,7 @@ import lombok.Setter;
 @EqualsAndHashCode
 @Getter
 @Setter
-@IdClass(main.blps_lab2.data.UsersCoursesPK.class)
+@IdClass(main.blps_lab2.model.UsersCoursesPK.class)
 public class UsersCourses {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id

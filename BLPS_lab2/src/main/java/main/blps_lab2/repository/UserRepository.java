@@ -1,16 +1,19 @@
 package main.blps_lab2.repository;
 
-import main.blps_lab2.data.BankCard;
-import main.blps_lab2.data.RoleEnum;
-import main.blps_lab2.data.UserEntity;
+import main.blps_lab2.model.BankCard;
+import main.blps_lab2.model.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
+    @Query(value = "select * from \"User\"", nativeQuery = true)
+    List<UserEntity> getAll();
+
     @Transactional
     @Modifying
     @Query(value = "insert into \"User\" values (default, :email, :password, cast(:role as \"RoleEnum\"), false)", nativeQuery = true)
