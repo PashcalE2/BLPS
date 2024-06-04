@@ -3,7 +3,9 @@ package main.blps_lab2.repository;
 
 import main.blps_lab2.model.Course;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,4 +16,15 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
 
     @Query(value = "select * from \"Course\" where id = :courseId", nativeQuery = true)
     Optional<Course> getCourseById(Long courseId);
+
+
+    @Transactional
+    @Modifying
+    @Query(value = "insert into \"Course\" values (default, :name, :price)", nativeQuery = true)
+    void insert(String name, Integer price);
+
+    @Transactional
+    @Modifying
+    @Query(value = "update \"Course\" set name = :name, price = :price where id = :courseId", nativeQuery = true)
+    void updateCourseById(Long courseId, String name, Integer price);
 }

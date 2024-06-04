@@ -34,20 +34,13 @@ public class AdminService implements AdminServiceInterface {
 
     @Override
     public void createNewCourse(Course course) {
-        courseRepository.save(course);
+        courseRepository.insert(course.getName(), course.getPrice());
     }
 
     @Override
     @SneakyThrows
     public void updateCourseById(Course course) {
-        Course db_course = courseRepository
-                .findById(course.getId())
-                .orElseThrow(() -> new CourseNotFoundException(course.getId()));
-
-        db_course.setName(course.getName());
-        db_course.setPrice(course.getPrice());
-
-        courseRepository.save(course);
+        courseRepository.updateCourseById(course.getId(), course.getName(), course.getPrice());
     }
 
     @Override

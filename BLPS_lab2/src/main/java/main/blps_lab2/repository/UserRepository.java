@@ -26,10 +26,12 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     @Query(value = "call \"attach_user_card\"(:userId, :serialNumber, :validityDate, :cvv)", nativeQuery = true)
     void attachClientCard(Long userId, String serialNumber, String validityDate, String cvv);
 
+    @Transactional
     @Modifying
     @Query(value = "update \"User\" set banned = true where id = :userId", nativeQuery = true)
     void banUser(Long userId);
 
+    @Transactional
     @Modifying
     @Query(value = "update \"User\" set banned = false where id = :userId", nativeQuery = true)
     void unbanUser(Long userId);
