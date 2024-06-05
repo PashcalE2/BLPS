@@ -12,4 +12,8 @@ public interface AdminServiceInterface {
     void updateCourseById(Course course);
 
     int loadUsersFromDB();
+
+    void blockCourse(Long courseId);
+
+    void unblockCourse(Long courseId);
 }

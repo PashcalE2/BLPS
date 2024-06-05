@@ -130,4 +130,10 @@ public class DefaultAdvice {
         log.error(String.format("Нет такого курса: \ncourseId = %d \n", e.getCourseId()));
         return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
     }
+
+    @ExceptionHandler(CourseIsBlockedException.class)
+    public ResponseEntity<?> handleCourseIsBlocked(CourseIsBlockedException e) {
+        log.error(String.format("Этот курс заблокирован: \ncourseId = %d \n", e.getCourseId()));
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+    }
 }

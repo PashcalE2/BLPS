@@ -1,7 +1,7 @@
 -- Курсы
 
-insert into "Course" values (default, 'cheap', 99);
-insert into "Course" values (default, 'expensive', 999);
+insert into "Course" values (default, 'cheap', 99, true);
+insert into "Course" values (default, 'expensive', 999, false);
 
 
 -- Клиенты

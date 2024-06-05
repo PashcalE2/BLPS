@@ -27,4 +27,14 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
     @Modifying
     @Query(value = "update \"Course\" set name = :name, price = :price where id = :courseId", nativeQuery = true)
     void updateCourseById(Long courseId, String name, Integer price);
+
+    @Transactional
+    @Modifying
+    @Query(value = "update \"Course\" set blocked = true where id = :courseId", nativeQuery = true)
+    void blockCourse(Long courseId);
+
+    @Transactional
+    @Modifying
+    @Query(value = "update \"Course\" set blocked = false where id = :courseId", nativeQuery = true)
+    void unblockCourse(Long courseId);
 }

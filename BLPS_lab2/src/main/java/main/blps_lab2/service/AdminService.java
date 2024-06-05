@@ -49,4 +49,14 @@ public class AdminService implements AdminServiceInterface {
         xmlUserRepository.saveAll(users);
         return users.size();
     }
+
+    @Override
+    public void blockCourse(Long courseId) {
+        courseRepository.blockCourse(courseId);
+    }
+
+    @Override
+    public void unblockCourse(Long courseId) {
+        courseRepository.unblockCourse(courseId);
+    }
 }

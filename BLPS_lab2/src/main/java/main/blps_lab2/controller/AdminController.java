@@ -48,4 +48,16 @@ public class AdminController {
     public ResponseEntity<?> loadUsersFromDB() {
         return new ResponseEntity<>(String.format("Записано %d пользователей", adminService.loadUsersFromDB()), HttpStatus.OK);
     }
+
+    @PostMapping(value = "/block_course")
+    public ResponseEntity<?> blockCourse(@RequestParam(defaultValue = "0") Long courseId) {
+        adminService.blockCourse(courseId);
+        return new ResponseEntity<>(String.format("Курс %d заблокирован", courseId), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/unblock_course")
+    public ResponseEntity<?> unblockCourse(@RequestParam(defaultValue = "0") Long courseId) {
+        adminService.unblockCourse(courseId);
+        return new ResponseEntity<>(String.format("Курс %d разблокирован", courseId), HttpStatus.OK);
+    }
 }

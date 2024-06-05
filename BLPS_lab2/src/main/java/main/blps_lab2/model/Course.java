@@ -23,4 +23,8 @@ public class Course {
     @Basic
     @Column(name = "price", nullable = false)
     private Integer price;
+
+    @Basic
+    @Column(name = "blocked", nullable = false)
+    private Boolean blocked;
 }

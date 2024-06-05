@@ -26,7 +26,7 @@ public class ClientController {
     @PostMapping(value = "/course_sign_up")
     public ResponseEntity<?> courseSignUp(
             @RequestParam(defaultValue = "0") Long courseId
-    ) throws CourseNotFoundException, ClientAlreadySignedUpException, UserNotFoundException, ClientCardDataIsMissingException, CantRequestBankException, NotEnoughMoneyOnCardException, UserIsBannedException {
+    ) throws CourseNotFoundException, ClientAlreadySignedUpException, UserNotFoundException, ClientCardDataIsMissingException, CantRequestBankException, NotEnoughMoneyOnCardException, UserIsBannedException, CourseIsBlockedException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         clientService.courseSignUp(auth, courseId);

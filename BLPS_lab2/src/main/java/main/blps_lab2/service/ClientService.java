@@ -46,12 +46,16 @@ public class ClientService implements ClientServiceInterface {
     }
 
     @Override
-    public void courseSignUp(Authentication auth, Long courseId) throws CourseNotFoundException, ClientAlreadySignedUpException, ClientCardDataIsMissingException, CantRequestBankException, NotEnoughMoneyOnCardException, UserNotFoundException, UserIsBannedException {
+    public void courseSignUp(Authentication auth, Long courseId) throws CourseNotFoundException, ClientAlreadySignedUpException, ClientCardDataIsMissingException, CantRequestBankException, NotEnoughMoneyOnCardException, UserNotFoundException, UserIsBannedException, CourseIsBlockedException {
         Optional<Course> db_course = courseRepository.getCourseById(courseId);
         if (db_course.isEmpty()) {
             throw new CourseNotFoundException(courseId);
         }
         Course course = db_course.get();
+
+        if (course.getBlocked()) {
+            throw new CourseIsBlockedException(courseId);
+        }
 
         String login = (String) auth.getPrincipal();
         Optional<UserEntity> db_client = userRepository.findByEmail(login);

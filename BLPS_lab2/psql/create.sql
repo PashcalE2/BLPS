@@ -23,7 +23,8 @@ create table if not exists "BankCard"(
 create table if not exists "Course"(
     id bigserial primary key,
     name text unique not null,
-    price int not null check (price > 0)
+    price int not null check (price > 0),
+    blocked bool not null
 );
 
 create table if not exists "UsersCourses"(
