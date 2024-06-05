@@ -2,6 +2,7 @@ package main.blps_lab2.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import main.blps_lab2.exception.CourseNotFoundException;
 import main.blps_lab2.model.Course;
 import main.blps_lab2.service.interfaces.AdminServiceInterface;
 import org.springframework.http.HttpStatus;
@@ -50,13 +51,13 @@ public class AdminController {
     }
 
     @PostMapping(value = "/block_course")
-    public ResponseEntity<?> blockCourse(@RequestParam(defaultValue = "0") Long courseId) {
+    public ResponseEntity<?> blockCourse(@RequestParam(defaultValue = "0") Long courseId) throws CourseNotFoundException {
         adminService.blockCourse(courseId);
         return new ResponseEntity<>(String.format("Курс %d заблокирован", courseId), HttpStatus.OK);
     }
 
     @PostMapping(value = "/unblock_course")
-    public ResponseEntity<?> unblockCourse(@RequestParam(defaultValue = "0") Long courseId) {
+    public ResponseEntity<?> unblockCourse(@RequestParam(defaultValue = "0") Long courseId) throws CourseNotFoundException {
         adminService.unblockCourse(courseId);
         return new ResponseEntity<>(String.format("Курс %d разблокирован", courseId), HttpStatus.OK);
     }
