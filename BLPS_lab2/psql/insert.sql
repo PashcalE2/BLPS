@@ -6,10 +6,10 @@ insert into "Course" values (default, 'expensive', 999, false);
 
 -- Клиенты
 
-insert into "User" values (1, 'a@a.a', '123', 'CLIENT', false);
-insert into "User" values (2, 'b@b.b', '123', 'CLIENT', false);
-insert into "User" values (3, 'c@c.c', '123', 'CLIENT', true);
-insert into "User" values (4, 'admin@a.a', '123', 'ADMIN', false);
+insert into "User" values (1, 'a@a.a', '$2a$10$k8pdc.vCNhjR5HivVT6OnO/7ZbpHDUfy9f.UZ4m9gqlfn6V3SAjXa', 'CLIENT', false);
+insert into "User" values (2, 'b@b.b', '$2a$10$k8pdc.vCNhjR5HivVT6OnO/7ZbpHDUfy9f.UZ4m9gqlfn6V3SAjXa', 'CLIENT', false);
+insert into "User" values (3, 'c@c.c', '$2a$10$k8pdc.vCNhjR5HivVT6OnO/7ZbpHDUfy9f.UZ4m9gqlfn6V3SAjXa', 'CLIENT', true);
+insert into "User" values (4, 'admin@a.a', '$2a$10$k8pdc.vCNhjR5HivVT6OnO/7ZbpHDUfy9f.UZ4m9gqlfn6V3SAjXa', 'ADMIN', false);
 
 
 -- Карточки
