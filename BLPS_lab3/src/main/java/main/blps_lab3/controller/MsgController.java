@@ -1,6 +1,8 @@
 package main.blps_lab3.controller;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import main.blps_lab3.dto.JwtRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,14 +15,14 @@ import java.util.concurrent.CompletableFuture;
 @RestController
 @RequestMapping("/msg")
 @Slf4j
+@AllArgsConstructor
 public class MsgController {
-    @Autowired
-    private KafkaTemplate<String, String> kafkaTemplate;
+    private final KafkaTemplate<String, JwtRequest> kafkaTemplate;
 
     @PostMapping(value = "/sendOrder")
     public ResponseEntity<?> sendOrder(
             @RequestParam String msgId,
-            @RequestBody String msg
+            @RequestBody JwtRequest msg
     ) {
         kafkaTemplate.send("msg", msgId, msg);
 
@@ -30,9 +32,9 @@ public class MsgController {
     @PostMapping(value = "/sendMsg")
     public ResponseEntity<?> sendMsg(
             @RequestParam String msgId,
-            @RequestBody String msg
+            @RequestBody JwtRequest msg
     ) {
-        CompletableFuture<SendResult<String, String>> future = kafkaTemplate.send("msg", msgId, msg);
+        CompletableFuture<SendResult<String, JwtRequest>> future = kafkaTemplate.send("msg", msgId, msg);
 
         future.whenComplete((result, throwable) -> {
             log.info(result.toString());
