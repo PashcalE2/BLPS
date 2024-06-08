@@ -17,10 +17,9 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
     @Query(value = "select * from \"Course\" where id = :courseId", nativeQuery = true)
     Optional<Course> getCourseById(Long courseId);
 
-
     @Transactional
     @Modifying
-    @Query(value = "insert into \"Course\" values (default, :name, :price)", nativeQuery = true)
+    @Query(value = "insert into \"Course\" values (default, :name, :price, false)", nativeQuery = true)
     void insert(String name, Integer price);
 
     @Transactional

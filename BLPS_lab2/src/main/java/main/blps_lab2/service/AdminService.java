@@ -12,6 +12,7 @@ import main.blps_lab2.service.interfaces.AdminServiceInterface;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +23,8 @@ public class AdminService implements AdminServiceInterface {
 
     @Override
     public void banUser(Long userId) {
+
+
         userRepository.banUser(userId);
         xmlUserRepository.banUser(userId);
     }
@@ -40,6 +43,12 @@ public class AdminService implements AdminServiceInterface {
     @Override
     @SneakyThrows
     public void updateCourseById(Course course) {
+        Optional<Course> db_course = courseRepository.getCourseById(course.getId());
+
+        if (db_course.isEmpty()) {
+            throw new CourseNotFoundException(course.getId());
+        }
+
         courseRepository.updateCourseById(course.getId(), course.getName(), course.getPrice());
     }
 
@@ -51,12 +60,24 @@ public class AdminService implements AdminServiceInterface {
     }
 
     @Override
-    public void blockCourse(Long courseId) {
+    public void blockCourse(Long courseId) throws CourseNotFoundException {
+        Optional<Course> db_course = courseRepository.getCourseById(courseId);
+
+        if (db_course.isEmpty()) {
+            throw new CourseNotFoundException(courseId);
+        }
+
         courseRepository.blockCourse(courseId);
     }
 
     @Override
-    public void unblockCourse(Long courseId) {
+    public void unblockCourse(Long courseId) throws CourseNotFoundException {
+        Optional<Course> db_course = courseRepository.getCourseById(courseId);
+
+        if (db_course.isEmpty()) {
+            throw new CourseNotFoundException(courseId);
+        }
+
         courseRepository.unblockCourse(courseId);
     }
 }

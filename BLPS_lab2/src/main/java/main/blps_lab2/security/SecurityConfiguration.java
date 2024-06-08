@@ -29,9 +29,6 @@ public class SecurityConfiguration {
                 .addFilterAfter(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
                         authorizationManagerRequestMatcherRegistry
-                                .requestMatchers("/admin/**").permitAll()
-                                .requestMatchers("/client/**").permitAll()
-                                .requestMatchers("/public/**").permitAll()
                                 .anyRequest().permitAll())
                 .build();
     }

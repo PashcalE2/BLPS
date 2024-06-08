@@ -1,5 +1,6 @@
 package main.blps_lab2.service.interfaces;
 
+import main.blps_lab2.exception.CourseNotFoundException;
 import main.blps_lab2.model.Course;
 
 public interface AdminServiceInterface {
@@ -13,7 +14,7 @@ public interface AdminServiceInterface {
 
     int loadUsersFromDB();
 
-    void blockCourse(Long courseId);
+    void blockCourse(Long courseId) throws CourseNotFoundException;
 
-    void unblockCourse(Long courseId);
+    void unblockCourse(Long courseId) throws CourseNotFoundException;
 }
