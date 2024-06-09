@@ -24,7 +24,7 @@ public class AdminMessageService {
         mailService.sendEmail(
                 banRecord.value().getUserEmail(),
                 "Вам бан от " + banRecord.value().getDate(),
-                "Поздравляем!"
+                "Тестируем org.springframework.mail.javamail.JavaMailSender"
         );
     }
 
@@ -35,7 +35,7 @@ public class AdminMessageService {
         mailService.sendEmail(
                 unbanRecord.value().getUserEmail(),
                 "Вам разбан от " + unbanRecord.value().getDate(),
-                "Поздравляем!"
+                "Тестируем org.springframework.mail.javamail.JavaMailSender"
         );
     }
 }

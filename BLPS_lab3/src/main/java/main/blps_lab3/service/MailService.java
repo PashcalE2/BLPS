@@ -22,6 +22,6 @@ public class MailService implements MailServiceInterface {
         simpleMailMessage.setText(message);
         emailSender.send(simpleMailMessage);
 
-        log.info("Отправлен email: \nTo: {} \nSubject: {} \nText: {}", userEmail, title, message);
+        log.info("Отправлен email: \nкому: {} \nзаголовок: {} \nтекст: {}", userEmail, title, message);
     }
 }
