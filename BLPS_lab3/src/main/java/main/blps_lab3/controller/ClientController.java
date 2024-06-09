@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import main.blps_lab3.dto.BankCardCredentials;
 import main.blps_lab3.exception.*;
 import main.blps_lab3.service.interfaces.ClientServiceInterface;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.annotation.ApplicationScope;
 
+@Profile("publisher")
 @RestController
 @CrossOrigin
 @ApplicationScope

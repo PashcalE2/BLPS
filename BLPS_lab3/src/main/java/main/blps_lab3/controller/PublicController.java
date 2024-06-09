@@ -10,6 +10,7 @@ import main.blps_lab3.model.RoleEnum;
 import main.blps_lab3.service.AuthService;
 import main.blps_lab3.service.interfaces.CourseServiceInterface;
 import main.blps_lab3.service.interfaces.UserServiceInterface;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,6 +19,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.annotation.ApplicationScope;
 
+@Profile("publisher")
 @RestController
 @CrossOrigin
 @ApplicationScope

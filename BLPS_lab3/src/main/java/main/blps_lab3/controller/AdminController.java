@@ -2,15 +2,17 @@ package main.blps_lab3.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import main.blps_lab3.exception.CourseNotFoundException;
+import main.blps_lab3.exception.*;
 import main.blps_lab3.model.Course;
 import main.blps_lab3.service.interfaces.AdminServiceInterface;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.annotation.ApplicationScope;
 
+@Profile("publisher")
 @RestController
 @CrossOrigin
 @ApplicationScope
@@ -22,13 +24,13 @@ public class AdminController {
     private final AdminServiceInterface adminService;
 
     @PostMapping(value = "/ban_user")
-    public ResponseEntity<?> banUser(@RequestParam(defaultValue = "0") Long userId) {
+    public ResponseEntity<?> banUser(@RequestParam(defaultValue = "0") Long userId) throws UserNotFoundException, UserAlreadyBannedExcpetion, CantBanOrUnbanAdminException {
         adminService.banUser(userId);
         return new ResponseEntity<>(String.format("Пользователь %d забанен", userId), HttpStatus.OK);
     }
 
     @PostMapping(value = "/unban_user")
-    public ResponseEntity<?> unbanUser(@RequestParam(defaultValue = "0") Long userId) {
+    public ResponseEntity<?> unbanUser(@RequestParam(defaultValue = "0") Long userId) throws UserNotFoundException, UserAlreadyUnbannedExcpetion, CantBanOrUnbanAdminException {
         adminService.unbanUser(userId);
         return new ResponseEntity<>(String.format("Пользователь %d разбанен", userId), HttpStatus.OK);
     }

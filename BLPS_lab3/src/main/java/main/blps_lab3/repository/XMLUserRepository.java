@@ -2,6 +2,7 @@ package main.blps_lab3.repository;
 
 import com.thoughtworks.xstream.XStream;
 import lombok.extern.slf4j.Slf4j;
+import main.blps_lab3.exception.UserNotFoundException;
 import main.blps_lab3.model.UserEntity;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
@@ -20,7 +21,7 @@ public class XMLUserRepository {
     private final XStream xstream;
     private final Path xmlPath;
 
-    public XMLUserRepository(@Value("${lab2.dir}") String rawPath) {
+    public XMLUserRepository(@Value("${lab3.dir}") String rawPath) {
         xmlPath = Paths.get(rawPath).resolve("users.xml");
         xstream = new XStream();
         xstream.allowTypes(new Class[] {UserEntity.class});
@@ -45,14 +46,10 @@ public class XMLUserRepository {
         }
     }
 
-    public void delete(UserEntity user) {
-        List<UserEntity> users = getAll();
-        users.remove(user);
-        saveAll(users);
-    }
-
-    public void deleteAll() {
-
+    public Optional<UserEntity> findById(Long userId) {
+        return getAll().stream()
+                .filter(user -> userId.equals(user.getId()))
+                .findFirst();
     }
 
     public Optional<UserEntity> findByEmail(String email) {
@@ -61,20 +58,21 @@ public class XMLUserRepository {
                 .findFirst();
     }
 
-    public void banUser(Long userId) {
+    public void banUser(Long userId) throws UserNotFoundException {
         setUserBan(userId, true);
     }
 
-    public void unbanUser(Long userId) {
+    public void unbanUser(Long userId) throws UserNotFoundException {
         setUserBan(userId, false);
     }
 
-    private void setUserBan(Long userId, Boolean banned) {
+    private void setUserBan(Long userId, Boolean banned) throws UserNotFoundException {
         List<UserEntity> users = getAll();
 
         UserEntity user = users.stream()
                 .filter(elem -> userId.equals(elem.getId()))
-                .findAny().orElseThrow();
+                .findAny()
+                .orElseThrow(() -> new UserNotFoundException(String.format("id = %d", userId)));
 
         users.remove(user);
         user.setBanned(banned);

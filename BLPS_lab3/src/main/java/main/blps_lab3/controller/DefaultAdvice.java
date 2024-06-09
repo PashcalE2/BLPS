@@ -136,4 +136,18 @@ public class DefaultAdvice {
         log.error(String.format("Этот курс заблокирован: \ncourseId = %d \n", e.getCourseId()));
         return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
     }
+
+    // ADMIN
+
+    @ExceptionHandler(UserAlreadyBannedExcpetion.class)
+    public ResponseEntity<?> handleUserAlreadyBanned(UserAlreadyBannedExcpetion e) {
+        log.error(String.format("Пользователь уже забанен: \nlogin = %s", e.getLogin()));
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(UserAlreadyUnbannedExcpetion.class)
+    public ResponseEntity<?> handleUserAlreadyUnbanned(UserAlreadyUnbannedExcpetion e) {
+        log.error(String.format("Пользователь уже разбанен: \nlogin = %s", e.getLogin()));
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+    }
 }

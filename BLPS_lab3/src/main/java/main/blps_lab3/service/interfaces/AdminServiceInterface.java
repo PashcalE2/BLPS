@@ -1,12 +1,12 @@
 package main.blps_lab3.service.interfaces;
 
-import main.blps_lab3.exception.CourseNotFoundException;
+import main.blps_lab3.exception.*;
 import main.blps_lab3.model.Course;
 
 public interface AdminServiceInterface {
-    void banUser(Long userId);
+    void banUser(Long userId) throws UserNotFoundException, UserAlreadyBannedExcpetion, CantBanOrUnbanAdminException;
 
-    void unbanUser(Long userId);
+    void unbanUser(Long userId) throws UserNotFoundException, UserAlreadyUnbannedExcpetion, CantBanOrUnbanAdminException;
 
     void createNewCourse(Course course);
 
