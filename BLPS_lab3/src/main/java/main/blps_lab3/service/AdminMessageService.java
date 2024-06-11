@@ -19,7 +19,7 @@ public class AdminMessageService {
 
     @KafkaListener(topics = "banDetails", containerFactory = "kafkaBanDetailsListenerContainerFactory")
     public void banDetailsEmail(ConsumerRecord<String, BanDetails> banRecord) {
-        log.info("Бан (banDetailsEmail): \n{} \n{}", banRecord.value().getUserEmail(), banRecord.value().getDate());
+        log.info("Бан: \n{} \n{}", banRecord.value().getUserEmail(), banRecord.value().getDate());
 
         mailService.sendEmail(
                 banRecord.value().getUserEmail(),
@@ -30,7 +30,7 @@ public class AdminMessageService {
 
     @KafkaListener(topics = "unbanDetails", containerFactory = "kafkaUnbanDetailsListenerContainerFactory")
     public void unbanDetailsEmail(ConsumerRecord<String, UnbanDetails> unbanRecord) {
-        log.info("Разбан (unbanDetailsEmail): \n{} \n{}", unbanRecord.value().getUserEmail(), unbanRecord.value().getDate());
+        log.info("Разбан: \n{} \n{}", unbanRecord.value().getUserEmail(), unbanRecord.value().getDate());
 
         mailService.sendEmail(
                 unbanRecord.value().getUserEmail(),
