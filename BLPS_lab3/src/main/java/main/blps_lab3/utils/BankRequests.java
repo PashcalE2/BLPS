@@ -29,7 +29,6 @@ public class BankRequests {
                     .build();
 
             response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-            httpClient.close();
         } catch (Exception e) {
             throw new CantRequestBankException(e.getMessage());
         }
