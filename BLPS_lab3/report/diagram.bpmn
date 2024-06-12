@@ -263,7 +263,7 @@
         <bpmn:targetRef>DataStoreReference_1gx2b1d</bpmn:targetRef>
       </bpmn:dataOutputAssociation>
     </bpmn:task>
-    <bpmn:intermediateCatchEvent id="Event_1xdrfdq">
+    <bpmn:intermediateCatchEvent id="Event_1xdrfdq" name="Получение информации о забаненом пользователе">
       <bpmn:incoming>Flow_1t2pelh</bpmn:incoming>
       <bpmn:outgoing>Flow_0nlvzoe</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_1nzob1s" />
@@ -272,7 +272,7 @@
       <bpmn:incoming>Flow_0nlvzoe</bpmn:incoming>
       <bpmn:outgoing>Flow_1aaolm6</bpmn:outgoing>
     </bpmn:task>
-    <bpmn:intermediateThrowEvent id="Event_1ncjc8v">
+    <bpmn:intermediateThrowEvent id="Event_1ncjc8v" name="Отправка информации о забаненом клиенте">
       <bpmn:incoming>Flow_176qtbg</bpmn:incoming>
       <bpmn:outgoing>Flow_1t2pelh</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_1l79jhq" />
@@ -338,12 +338,12 @@
     <bpmn:sequenceFlow id="Flow_050ujfg" sourceRef="Event_0enqm55" targetRef="Activity_12whmgx" />
     <bpmn:sequenceFlow id="Flow_11ossel" sourceRef="Event_14p2gj0" targetRef="Event_0ayty38" />
     <bpmn:sequenceFlow id="Flow_0j8n0ih" sourceRef="Activity_12whmgx" targetRef="Event_1bxsoia" />
-    <bpmn:intermediateThrowEvent id="Event_1bxsoia">
+    <bpmn:intermediateThrowEvent id="Event_1bxsoia" name="Отправка информации о разбаненом клиенте">
       <bpmn:incoming>Flow_0j8n0ih</bpmn:incoming>
       <bpmn:outgoing>Flow_06r0p5d</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_0a1a66e" />
     </bpmn:intermediateThrowEvent>
-    <bpmn:intermediateCatchEvent id="Event_1dhoof3">
+    <bpmn:intermediateCatchEvent id="Event_1dhoof3" name="Получение информации о разбаненом пользователе">
       <bpmn:incoming>Flow_06r0p5d</bpmn:incoming>
       <bpmn:outgoing>Flow_0id19vm</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_02hmrem" />
@@ -951,9 +951,15 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1bxsoia_di" bpmnElement="Event_1bxsoia">
         <dc:Bounds x="1532" y="2712" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1572" y="2703" width="76" height="53" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1dhoof3_di" bpmnElement="Event_1dhoof3">
         <dc:Bounds x="1442" y="2872" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1422" y="2915" width="76" height="53" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_18y79e3_di" bpmnElement="Activity_18y79e3">
         <dc:Bounds x="1530" y="2850" width="100" height="80" />
@@ -1039,6 +1045,9 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1xdrfdq_di" bpmnElement="Event_1xdrfdq">
         <dc:Bounds x="662" y="2872" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="642" y="2915" width="76" height="53" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0ls6zes_di" bpmnElement="Activity_0ls6zes">
         <dc:Bounds x="750" y="2850" width="100" height="80" />
@@ -1046,6 +1055,9 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1ncjc8v_di" bpmnElement="Event_1ncjc8v">
         <dc:Bounds x="802" y="2712" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="842" y="2703" width="76" height="53" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0lgjbon_di" bpmnElement="Event_0lgjbon">
         <dc:Bounds x="662" y="2672" width="36" height="36" />

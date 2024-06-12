@@ -46,7 +46,8 @@ public class QuartzConfiguration {
         return TriggerBuilder.newTrigger()
                 .forJob(dailyJobDetail())
                 .withIdentity("dailyTrigger")
-                .withSchedule(CronScheduleBuilder.cronSchedule("0 0 0 * * ?"))
+                // .withSchedule(CronScheduleBuilder.cronSchedule("0 0 0 * * ?"))
+                .withSchedule(CronScheduleBuilder.cronSchedule("0 * * * * ?"))
                 .build();
     }
 
@@ -63,7 +64,8 @@ public class QuartzConfiguration {
         return TriggerBuilder.newTrigger()
                 .forJob(monthlyJobDetail())
                 .withIdentity("monthlyTrigger")
-                .withSchedule(CronScheduleBuilder.cronSchedule("0 0 0 1 * ?"))
+                // .withSchedule(CronScheduleBuilder.cronSchedule("0 0 0 1 * ?"))
+                .withSchedule(CronScheduleBuilder.cronSchedule("0 0/2 * * * ?"))
                 .build();
     }
 }
