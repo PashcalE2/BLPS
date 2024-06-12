@@ -2,6 +2,7 @@ package main.blps_lab3.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import main.blps_lab3.dto.RequestsInfoForPeriod;
 import main.blps_lab3.model.RequestInfo;
 import main.blps_lab3.repository.RequestInfoRepository;
 import org.springframework.stereotype.Service;
@@ -39,7 +40,7 @@ public class RequestMetricService {
         metricMap.clear();
     }
 
-    public List<RequestInfo> getRequestsInfoInRange(LocalDateTime start, LocalDateTime stop) {
+    public List<RequestsInfoForPeriod> getRequestsInfoInRange(LocalDateTime start, LocalDateTime stop) {
         return requestInfoRepository.findInRange(start, stop);
     }
 

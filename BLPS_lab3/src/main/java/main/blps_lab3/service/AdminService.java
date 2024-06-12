@@ -55,7 +55,7 @@ public class AdminService implements AdminServiceInterface {
 
         kafkaBanDetailsProducer.send(new ProducerRecord<>(
                 "banDetails",
-                now.toString(),
+                user.getEmail(),
                 new BanDetails(user.getEmail(), now)
         ));
     }
@@ -80,7 +80,7 @@ public class AdminService implements AdminServiceInterface {
 
         kafkaUnbanDetailsProducer.send(new ProducerRecord<>(
                 "unbanDetails",
-                now.toString(),
+                user.getEmail(),
                 new UnbanDetails(user.getEmail(), now)
         ));
     }
