@@ -1,16 +1,16 @@
 package main.blps_lab3.quartz;
 
-import lombok.RequiredArgsConstructor;
 import main.blps_lab3.service.RequestMetricService;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
 public class DailyJob implements Job {
-    private final RequestMetricService requestMetricService;
+    @Autowired
+    private RequestMetricService requestMetricService;
 
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {

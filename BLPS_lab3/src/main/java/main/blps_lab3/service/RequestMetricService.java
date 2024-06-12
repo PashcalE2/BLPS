@@ -25,13 +25,7 @@ public class RequestMetricService {
     public void saveAllRequestsInfo() {
         try {
             metricMap.forEach((request, statusMap) -> statusMap.forEach((status, count) -> {
-                RequestInfo requestInfo = new RequestInfo();
-                requestInfo.setRequest(request);
-                requestInfo.setStatus(status);
-                requestInfo.setCount(count);
-                requestInfo.setDate(LocalDateTime.now());
-
-                requestInfoRepository.save(requestInfo);
+                requestInfoRepository.insert(request, status, count, LocalDateTime.now());
             }));
         }
         catch (RuntimeException e) {
