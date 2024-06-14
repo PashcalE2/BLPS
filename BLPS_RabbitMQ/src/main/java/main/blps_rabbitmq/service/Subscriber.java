@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 public class Subscriber {
     @PostConstruct
     public void setupMqtt() throws MqttException {
-        log.debug("Subscription to topic");
+        log.info("Subscription to topic");
 
         Mqtt.subscribe("test", 0, (s, mqttMessage) -> {
             log.info("Received: {}", new String(mqttMessage.getPayload()));

@@ -21,7 +21,7 @@ public class Default {
 
     @PostMapping("test")
     public ResponseEntity<?> test(@RequestParam(defaultValue = "0") Integer num) throws MqttException {
-        log.debug("Controller: test: {}", num);
+        log.info("Controller: test: {}", num);
 
         MqttMessage mqttMessage = new MqttMessage(num.toString().getBytes());
         publisher.send("test", mqttMessage);
