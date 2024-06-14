@@ -5,10 +5,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.eclipse.paho.client.mqttv3.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+@Profile("publisher")
 @Configuration
 @Slf4j
 public class MqttConfiguration {

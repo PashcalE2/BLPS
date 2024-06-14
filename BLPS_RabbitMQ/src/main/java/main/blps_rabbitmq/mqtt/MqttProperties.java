@@ -1,17 +1,19 @@
 package main.blps_rabbitmq.mqtt;
 
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
+@Profile("publisher")
 @Component
 public class MqttProperties {
     private String host = "tcp://localhost:1883";
 
-    private String username = "test";
+    private String username = "guest";
 
-    private String password = "test";
+    private String password = "guest";
 
-    private String[] topics = { "test" };
+    private String[] topics = { "mqtt.topic" };
 
     private String clientId = MqttAsyncClient.generateClientId();
 
