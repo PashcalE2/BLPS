@@ -12,6 +12,6 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class Publisher {
     public void send(String topic, MqttMessage mqttMessage) throws MqttException {
-        Mqtt.publish("test", mqttMessage);
+        Mqtt.publish(topic, mqttMessage);
     }
 }
