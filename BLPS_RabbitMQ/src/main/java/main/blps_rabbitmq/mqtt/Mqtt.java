@@ -18,13 +18,6 @@ public class Mqtt {
         Mqtt.iMqttAsyncClient = iMqttAsyncClient;
     }
 
-    /**
-     * release the news
-     *
-     * @param topic
-     * @param message
-     * @throws MqttException
-     */
     public static void publish(String topic, MqttMessage message) throws MqttException {
         iMqttAsyncClient.publish(topic, message);
     }
@@ -33,13 +26,6 @@ public class Mqtt {
         iMqttAsyncClient.publish(topic, payload, qos, retained);
     }
 
-    /**
-     * Subscribe message
-     *
-     * @param topic
-     * @param qos
-     * @throws MqttException
-     */
     public static void subscribe(String topic, int qos) throws MqttException {
         iMqttAsyncClient.subscribe(topic, qos);
     }

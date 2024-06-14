@@ -19,7 +19,6 @@ public class MqttConfiguration {
         options.setConnectionTimeout(30);
         options.setKeepAliveInterval(30);
         options.setAutomaticReconnect(true);
-//        options.setServerURIs(new String[]{mqttProperties.getHost()});
         options.setUserName(mqttProperties.getUsername());
         options.setPassword(mqttProperties.getPassword().toCharArray());
         return options;
@@ -39,9 +38,6 @@ public class MqttConfiguration {
         return client;
     }
 
-    /**
-     * Tune class
-     */
     static class DefaultCallback implements MqttCallback{
 
         @Override
