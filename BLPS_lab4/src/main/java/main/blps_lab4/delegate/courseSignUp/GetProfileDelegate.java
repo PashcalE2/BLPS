@@ -48,6 +48,8 @@ public class GetProfileDelegate implements JavaDelegate {
             throw new ClientAlreadySignedUpException(user.getId(), courseId);
         }
 
+        delegateExecution.setVariable("userId", user.getId());
+
         Optional<BankCardInterface> db_bankCard = userRepository.findBankCardByUserId(user.getId());
         if (db_bankCard.isEmpty()) {
             delegateExecution.setVariable("hasBankCard", false);
@@ -58,6 +60,5 @@ public class GetProfileDelegate implements JavaDelegate {
 
         delegateExecution.setVariable("hasBankCard", true);
         delegateExecution.setVariable("cardId", bankCard.getId());
-        delegateExecution.setVariable("userId", user.getId());
     }
 }
