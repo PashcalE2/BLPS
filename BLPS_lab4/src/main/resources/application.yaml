@@ -1,0 +1,69 @@
+server:
+  port: 8080
+
+
+admin:
+  email: ${ADMIN_EMAIL}
+
+
+spring:
+  application:
+    name: BLPS_lab4
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/studs
+    username: s311817
+    password: sbpJnyE9nUMK6eQe
+    driver-class-name: org.postgresql.Driver
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_ADDRESS}
+    password: ${MAIL_PASSWORD}
+    protocol: smtp
+
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          ssl:
+            trust: smtp.gmail.com
+
+
+jwt:
+  secret:
+    access: c2FoZGZxZWZHN0dEQVNqQmRqYWJkd3VkZGxzaW9kd2RqbzE4OTJ1dWlkc2FkdWlkaGFzZGl1OTE4MjdkeWhzYWROQkFTREpI
+    refresh: YXU3MTJkeTV1eXpkNzY0QlVFQ0ZIMTU0MzNXaXVoRkVXRkJVSXlieWh1ZEY5Sm5uamtkYXNuT1FRUFdPa2xhU0RLamt4emNIU0FK
+
+  expiration_minutes:
+    access: 60
+    refresh: 1440
+
+
+camunda:
+  bpm:
+    authorization:
+      enabled: false
+      enabled-for-custom-code: false
+
+    admin-user:
+      id: a
+      password: a
+    filter:
+      create: All tasks
+    database:
+      schema-update: drop-create
+      schema-name: s311817
+      table-prefix: s311817.
+
+
+lab4:
+  dir: C:/Root/Utils/BLPS/lab4
+
+
+logging:
+  level:
+    root: info

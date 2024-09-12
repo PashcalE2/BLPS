@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0z790fo" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.26.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.21.0">
+  <bpmn:collaboration id="Collaboration_15ibdn1">
+    <bpmn:participant id="Participant_00bgy99" name="Отправка уведомления о блокировке" processRef="sendBanEmail" />
+    <bpmn:participant id="Participant_1a8qlm7" name="Отправка уведомления о разблокировке" processRef="sendUnbanEmail" />
+  </bpmn:collaboration>
+  <bpmn:process id="sendBanEmail" name="Send ban email" isExecutable="true" camunda:historyTimeToLive="30">
+    <bpmn:laneSet id="LaneSet_070zzhk">
+      <bpmn:lane id="Lane_14xjljx" name="Сервис уведомлений">
+        <bpmn:flowNodeRef>StartEvent_1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Activity_00dkkwe</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Event_11w0vgj</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="StartEvent_1" name="Запрос на отправку уведомления">
+      <bpmn:outgoing>Flow_0n7t66k</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_12fxucj" messageRef="Message_09c4c1g" />
+    </bpmn:startEvent>
+    <bpmn:serviceTask id="Activity_00dkkwe" name="Отправка электронного письма" camunda:delegateExpression="${sendBanEmailDelegate}">
+      <bpmn:incoming>Flow_0n7t66k</bpmn:incoming>
+      <bpmn:outgoing>Flow_01r1td6</bpmn:outgoing>
+      <bpmn:dataOutputAssociation id="DataOutputAssociation_05k8gpn">
+        <bpmn:targetRef>DataStoreReference_0xnh7p5</bpmn:targetRef>
+      </bpmn:dataOutputAssociation>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="Event_11w0vgj" name="Письмо отправлено">
+      <bpmn:incoming>Flow_01r1td6</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_0n7t66k" sourceRef="StartEvent_1" targetRef="Activity_00dkkwe" />
+    <bpmn:sequenceFlow id="Flow_01r1td6" sourceRef="Activity_00dkkwe" targetRef="Event_11w0vgj" />
+    <bpmn:dataStoreReference id="DataStoreReference_0xnh7p5" name="База данных:&#10;таблица профилей пользователей" />
+    <bpmn:dataStoreReference id="DataStoreReference_0qwu8wi" name="База данных:&#10;таблица профилей пользователей" />
+  </bpmn:process>
+  <bpmn:message id="Message_09c4c1g" name="sendBanEmailRequest" />
+  <bpmn:process id="sendUnbanEmail" name="Send unban email" isExecutable="true" camunda:historyTimeToLive="30">
+    <bpmn:laneSet id="LaneSet_1wk9l9r">
+      <bpmn:lane id="Lane_15r5if1" name="Сервис уведомлений">
+        <bpmn:flowNodeRef>Event_1xc4y5x</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Activity_0pm87ha</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Event_1x5a1zk</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="Event_1xc4y5x" name="Запрос на отправку уведомления">
+      <bpmn:outgoing>Flow_1at8q9s</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_1gtq9p5" messageRef="Message_3s6rmv0" />
+    </bpmn:startEvent>
+    <bpmn:serviceTask id="Activity_0pm87ha" name="Отправка электронного письма" camunda:delegateExpression="${sendUnbanEmailDelegate}">
+      <bpmn:incoming>Flow_1at8q9s</bpmn:incoming>
+      <bpmn:outgoing>Flow_15bgg1r</bpmn:outgoing>
+      <bpmn:dataOutputAssociation id="DataOutputAssociation_0l7vq0q">
+        <bpmn:targetRef>DataStoreReference_0qwu8wi</bpmn:targetRef>
+      </bpmn:dataOutputAssociation>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="Event_1x5a1zk" name="Письмо отправлено">
+      <bpmn:incoming>Flow_15bgg1r</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1at8q9s" sourceRef="Event_1xc4y5x" targetRef="Activity_0pm87ha" />
+    <bpmn:sequenceFlow id="Flow_15bgg1r" sourceRef="Activity_0pm87ha" targetRef="Event_1x5a1zk" />
+  </bpmn:process>
+  <bpmn:message id="Message_3s6rmv0" name="sendUnbanEmailRequest" />
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_15ibdn1">
+      <bpmndi:BPMNShape id="Participant_00bgy99_di" bpmnElement="Participant_00bgy99" isHorizontal="true">
+        <dc:Bounds x="160" y="100" width="410" height="190" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_14xjljx_di" bpmnElement="Lane_14xjljx" isHorizontal="true">
+        <dc:Bounds x="190" y="100" width="380" height="190" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_18x0j1e_di" bpmnElement="StartEvent_1">
+        <dc:Bounds x="239" y="172" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="224" y="215" width="67" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0rquxsn_di" bpmnElement="Activity_00dkkwe">
+        <dc:Bounds x="330" y="150" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_11w0vgj_di" bpmnElement="Event_11w0vgj">
+        <dc:Bounds x="492" y="172" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="480" y="215" width="60" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0n7t66k_di" bpmnElement="Flow_0n7t66k">
+        <di:waypoint x="275" y="190" />
+        <di:waypoint x="330" y="190" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_01r1td6_di" bpmnElement="Flow_01r1td6">
+        <di:waypoint x="430" y="190" />
+        <di:waypoint x="492" y="190" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="DataStoreReference_0xnh7p5_di" bpmnElement="DataStoreReference_0xnh7p5">
+        <dc:Bounds x="355" y="325" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="342" y="382" width="76" height="53" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1jieq2q" bpmnElement="DataStoreReference_0qwu8wi">
+        <dc:Bounds x="865" y="325" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="852" y="382" width="76" height="53" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0ufe604" bpmnElement="Participant_1a8qlm7" isHorizontal="true">
+        <dc:Bounds x="670" y="100" width="410" height="190" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1da27b1" bpmnElement="Lane_15r5if1" isHorizontal="true">
+        <dc:Bounds x="700" y="100" width="380" height="190" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0524spd" bpmnElement="Event_1xc4y5x">
+        <dc:Bounds x="749" y="172" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="734" y="215" width="67" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1mqzs88" bpmnElement="Activity_0pm87ha">
+        <dc:Bounds x="840" y="150" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_16shqp2" bpmnElement="Event_1x5a1zk">
+        <dc:Bounds x="1002" y="172" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="990" y="215" width="60" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="BPMNEdge_03k0vf8" bpmnElement="Flow_1at8q9s">
+        <di:waypoint x="785" y="190" />
+        <di:waypoint x="840" y="190" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_16sx4oq" bpmnElement="Flow_15bgg1r">
+        <di:waypoint x="940" y="190" />
+        <di:waypoint x="1002" y="190" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="DataOutputAssociation_05k8gpn_di" bpmnElement="DataOutputAssociation_05k8gpn">
+        <di:waypoint x="380" y="230" />
+        <di:waypoint x="380" y="325" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_095bd5f" bpmnElement="DataOutputAssociation_0l7vq0q">
+        <di:waypoint x="890" y="230" />
+        <di:waypoint x="890" y="325" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
